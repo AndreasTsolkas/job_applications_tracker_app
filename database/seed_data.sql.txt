@@ -1,0 +1,339 @@
+-- =====================================================
+-- Job Application Tracker
+-- Seed Data
+-- PostgreSQL
+-- =====================================================
+
+
+-- =====================================================
+-- SECTOR
+-- =====================================================
+
+INSERT INTO sector (name, description)
+VALUES
+('Information Technology', 'Software, hardware and IT services'),
+('Finance', 'Banks, fintech and financial services'),
+('Healthcare', 'Medical and healthcare companies'),
+('Education', 'Educational technology and services');
+
+
+
+-- =====================================================
+-- COMPANY
+-- =====================================================
+
+INSERT INTO company
+(name, website, location, sector_id)
+VALUES
+(
+'Google',
+'https://google.com',
+'London',
+1
+),
+(
+'Microsoft',
+'https://microsoft.com',
+'Athens',
+1
+),
+(
+'JPMorgan',
+'https://jpmorgan.com',
+'London',
+2
+),
+(
+'Pfizer',
+'https://pfizer.com',
+'New York',
+3
+);
+
+
+
+-- =====================================================
+-- RECRUITER
+-- =====================================================
+
+INSERT INTO recruiter
+(first_name, last_name, email, linkedin_url, company_id)
+VALUES
+(
+'Anna',
+'Smith',
+'anna.smith@example.com',
+'https://linkedin.com/in/annasmith',
+1
+),
+(
+'John',
+'Brown',
+'john.brown@example.com',
+'https://linkedin.com/in/johnbrown',
+2
+);
+
+
+
+-- =====================================================
+-- JOB ROLE
+-- =====================================================
+
+INSERT INTO job_role
+(name, description)
+VALUES
+(
+'Backend Developer',
+'Develops server-side applications using Java and Spring Boot'
+),
+(
+'Frontend Developer',
+'Develops web applications using React and TypeScript'
+),
+(
+'Full Stack Developer',
+'Works on frontend and backend systems'
+),
+(
+'Data Engineer',
+'Builds and maintains data pipelines'
+);
+
+
+
+-- =====================================================
+-- EMPLOYMENT TYPE
+-- =====================================================
+
+INSERT INTO employment_type(name)
+VALUES
+('Full Time'),
+('Part Time'),
+('Contract'),
+('Internship'),
+('Freelance');
+
+
+
+-- =====================================================
+-- JOB POSTING
+-- =====================================================
+
+INSERT INTO job_posting
+(
+title,
+description,
+location,
+url,
+company_id,
+job_role_id,
+employment_type_id
+)
+VALUES
+(
+'Java Spring Boot Developer',
+'Develop REST APIs and backend services',
+'London',
+'https://example.com/job/1',
+1,
+1,
+1
+),
+(
+'React TypeScript Developer',
+'Build modern frontend applications',
+'Athens',
+'https://example.com/job/2',
+2,
+2,
+1
+),
+(
+'Full Stack Engineer',
+'Work across frontend and backend',
+'Remote',
+'https://example.com/job/3',
+2,
+3,
+3
+);
+
+
+
+-- =====================================================
+-- APP USER
+-- =====================================================
+
+INSERT INTO app_user
+(
+first_name,
+last_name,
+email,
+password_hash,
+user_role
+)
+VALUES
+(
+'Alex',
+'Johnson',
+'alex.johnson@example.com',
+'$2a$10$examplehashedpassword',
+'USER'
+);
+
+
+
+-- =====================================================
+-- CV
+-- =====================================================
+
+INSERT INTO cv
+(
+user_id,
+name,
+file_path,
+is_active
+)
+VALUES
+(
+1,
+'Alex Johnson CV',
+'/uploads/cv/alex_cv.pdf',
+TRUE
+);
+
+
+
+-- =====================================================
+-- COVER LETTER
+-- =====================================================
+
+INSERT INTO cover_letter
+(
+user_id,
+name,
+content,
+file_path
+)
+VALUES
+(
+1,
+'General Cover Letter',
+'I am interested in software development opportunities.',
+'/uploads/coverletters/general.pdf'
+);
+
+
+
+-- =====================================================
+-- APPLICATION STATUS
+-- =====================================================
+
+INSERT INTO application_status(name)
+VALUES
+('Applied'),
+('Screening'),
+('Interview'),
+('Offer'),
+('Rejected'),
+('Accepted'),
+('Withdrawn');
+
+
+
+-- =====================================================
+-- APPLICATION
+-- =====================================================
+
+INSERT INTO application
+(
+user_id,
+job_posting_id,
+status_id,
+cv_id,
+cover_letter_id,
+recruiter_id,
+applied_date,
+notes
+)
+VALUES
+(
+1,
+1,
+1,
+1,
+1,
+1,
+CURRENT_DATE,
+'Submitted through company website'
+);
+
+
+
+-- =====================================================
+-- APPLICATION STATUS HISTORY
+-- =====================================================
+
+INSERT INTO application_status_history
+(
+application_id,
+status_id,
+notes
+)
+VALUES
+(
+1,
+1,
+'Application created'
+);
+
+
+
+-- =====================================================
+-- INTERVIEW TYPE
+-- =====================================================
+
+INSERT INTO interview_type(name)
+VALUES
+('HR'),
+('Technical'),
+('Manager'),
+('Behavioural'),
+('Culture Fit');
+
+
+
+-- =====================================================
+-- INTERVIEW RESULT
+-- =====================================================
+
+INSERT INTO interview_result(name)
+VALUES
+('Pending'),
+('Passed'),
+('Failed'),
+('Cancelled');
+
+
+
+-- =====================================================
+-- INTERVIEW
+-- =====================================================
+
+INSERT INTO interview
+(
+application_id,
+type_id,
+result_id,
+scheduled_at,
+notes
+)
+VALUES
+(
+1,
+2,
+1,
+CURRENT_TIMESTAMP + INTERVAL '7 days',
+'Technical interview scheduled'
+);

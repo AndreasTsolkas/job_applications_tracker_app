@@ -1,0 +1,411 @@
+-- =====================================================
+-- Job Application Tracker Database
+-- PostgreSQL
+-- Database Schema
+-- =====================================================
+
+
+-- =====================================================
+-- USER
+-- =====================================================
+
+CREATE TABLE app_user (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    first_name VARCHAR(80),
+    last_name VARCHAR(80),
+
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+
+    user_role VARCHAR(30) NOT NULL DEFAULT 'USER',
+    enabled BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+-- =====================================================
+-- SECTOR
+-- =====================================================
+
+CREATE TABLE sector (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+-- =====================================================
+-- COMPANY
+-- =====================================================
+
+CREATE TABLE company (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    name VARCHAR(150) NOT NULL,
+    website VARCHAR(255),
+    location VARCHAR(150),
+
+    sector_id BIGINT NOT NULL,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_company_sector
+        FOREIGN KEY (sector_id)
+        REFERENCES sector(id)
+);
+
+
+
+CREATE INDEX idx_company_sector
+ON company(sector_id);
+
+
+
+-- =====================================================
+-- RECRUITER
+-- =====================================================
+
+CREATE TABLE recruiter (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    first_name VARCHAR(80),
+    last_name VARCHAR(80),
+
+    email VARCHAR(150),
+    linkedin_url VARCHAR(255),
+
+    company_id BIGINT NOT NULL,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_recruiter_company
+        FOREIGN KEY(company_id)
+        REFERENCES company(id)
+);
+
+
+
+-- =====================================================
+-- JOB ROLE
+-- =====================================================
+
+CREATE TABLE job_role (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+-- =====================================================
+-- EMPLOYMENT TYPE
+-- =====================================================
+
+CREATE TABLE employment_type (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+
+
+-- =====================================================
+-- JOB POSTING
+-- =====================================================
+
+CREATE TABLE job_posting (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+
+    location VARCHAR(150),
+    url VARCHAR(500),
+
+    company_id BIGINT NOT NULL,
+    job_role_id BIGINT NOT NULL,
+    employment_type_id BIGINT NOT NULL,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
+    CONSTRAINT fk_job_company
+        FOREIGN KEY(company_id)
+        REFERENCES company(id),
+
+
+    CONSTRAINT fk_job_role
+        FOREIGN KEY(job_role_id)
+        REFERENCES job_role(id),
+
+
+    CONSTRAINT fk_job_employment_type
+        FOREIGN KEY(employment_type_id)
+        REFERENCES employment_type(id)
+);
+
+
+
+CREATE INDEX idx_job_company
+ON job_posting(company_id);
+
+
+CREATE INDEX idx_job_role
+ON job_posting(job_role_id);
+
+
+
+-- =====================================================
+-- CV
+-- =====================================================
+
+CREATE TABLE cv (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    user_id BIGINT NOT NULL,
+
+    name VARCHAR(150) NOT NULL,
+    file_path VARCHAR(500),
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
+    CONSTRAINT fk_cv_user
+        FOREIGN KEY(user_id)
+        REFERENCES app_user(id)
+);
+
+
+
+-- =====================================================
+-- COVER LETTER
+-- =====================================================
+
+CREATE TABLE cover_letter (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    user_id BIGINT NOT NULL,
+
+    name VARCHAR(150) NOT NULL,
+    content TEXT,
+    file_path VARCHAR(500),
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
+    CONSTRAINT fk_cover_user
+        FOREIGN KEY(user_id)
+        REFERENCES app_user(id)
+);
+
+
+
+-- =====================================================
+-- APPLICATION STATUS
+-- =====================================================
+
+CREATE TABLE application_status (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+
+
+-- =====================================================
+-- APPLICATION
+-- =====================================================
+
+CREATE TABLE application (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    user_id BIGINT NOT NULL,
+
+    job_posting_id BIGINT NOT NULL,
+
+    status_id BIGINT NOT NULL,
+
+
+    cv_id BIGINT,
+
+    cover_letter_id BIGINT,
+
+    recruiter_id BIGINT,
+
+
+    applied_date DATE,
+
+    notes TEXT,
+
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
+    CONSTRAINT fk_application_user
+        FOREIGN KEY(user_id)
+        REFERENCES app_user(id),
+
+
+    CONSTRAINT fk_application_job
+        FOREIGN KEY(job_posting_id)
+        REFERENCES job_posting(id),
+
+
+    CONSTRAINT fk_application_status
+        FOREIGN KEY(status_id)
+        REFERENCES application_status(id),
+
+
+    CONSTRAINT fk_application_cv
+        FOREIGN KEY(cv_id)
+        REFERENCES cv(id),
+
+
+    CONSTRAINT fk_application_cover
+        FOREIGN KEY(cover_letter_id)
+        REFERENCES cover_letter(id),
+
+
+    CONSTRAINT fk_application_recruiter
+        FOREIGN KEY(recruiter_id)
+        REFERENCES recruiter(id)
+);
+
+
+
+CREATE INDEX idx_application_user
+ON application(user_id);
+
+
+CREATE INDEX idx_application_status
+ON application(status_id);
+
+
+
+-- =====================================================
+-- APPLICATION STATUS HISTORY
+-- =====================================================
+
+CREATE TABLE application_status_history (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    application_id BIGINT NOT NULL,
+
+    status_id BIGINT NOT NULL,
+
+    notes TEXT,
+
+    changed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
+    CONSTRAINT fk_history_application
+        FOREIGN KEY(application_id)
+        REFERENCES application(id),
+
+
+    CONSTRAINT fk_history_status
+        FOREIGN KEY(status_id)
+        REFERENCES application_status(id)
+);
+
+
+
+-- =====================================================
+-- INTERVIEW TYPE
+-- =====================================================
+
+CREATE TABLE interview_type (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+
+
+-- =====================================================
+-- INTERVIEW RESULT
+-- =====================================================
+
+CREATE TABLE interview_result (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+
+
+-- =====================================================
+-- INTERVIEW
+-- =====================================================
+
+CREATE TABLE interview (
+
+    id BIGSERIAL PRIMARY KEY,
+
+    application_id BIGINT NOT NULL,
+
+    type_id BIGINT NOT NULL,
+
+    result_id BIGINT NOT NULL,
+
+    scheduled_at TIMESTAMP NOT NULL,
+
+    notes TEXT,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
+    CONSTRAINT fk_interview_application
+        FOREIGN KEY(application_id)
+        REFERENCES application(id),
+
+
+    CONSTRAINT fk_interview_type
+        FOREIGN KEY(type_id)
+        REFERENCES interview_type(id),
+
+
+    CONSTRAINT fk_interview_result
+        FOREIGN KEY(result_id)
+        REFERENCES interview_result(id)
+);
+
+
+
+CREATE INDEX idx_interview_application
+ON interview(application_id);
