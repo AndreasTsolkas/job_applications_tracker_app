@@ -126,13 +126,13 @@ The application will start using the configured PostgreSQL database.
 Create a PostgreSQL database and execute:
 
 ```sql
-create.sql
+create_db.sql
 ```
 
 Then populate initial data:
 
 ```sql
-seed.sql
+seed_data.sql
 ```
 
 ## Future Development
