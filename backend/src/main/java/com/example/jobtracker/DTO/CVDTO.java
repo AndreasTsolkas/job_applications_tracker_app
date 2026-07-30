@@ -13,13 +13,13 @@ public class CVDTO {
 
     private Long id;
 
-    private String fileName;
+    private Long userId;
+
+    private String name;
 
     private String filePath;
 
-    private String description;
-
-    private Long userId;
+    private Boolean isActive;
 
     private LocalDateTime createdAt;
 
