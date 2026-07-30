@@ -2,8 +2,6 @@ package com.example.jobtracker.DTO;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,10 +12,4 @@ public class InterviewResultDTO {
     private Long id;
 
     private String name;
-
-    private String description;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }
