@@ -71,13 +71,15 @@ job_applications_tracker_app
 └── README.md
 ```
 
+The project is currently in the backend foundation stage.
+
 ---
 
 # Database
 
 The application uses PostgreSQL.
 
-The database model currently includes:
+The database model currently contains:
 
 * Users
 * Sectors
@@ -97,24 +99,24 @@ The database model currently includes:
 
 ## Database Migration Files
 
-Database initialization is handled through SQL migration scripts.
+Database initialization is handled through SQL scripts.
 
 ### create_db.sql
 
-Creates:
+Responsible for creating:
 
 * Database tables
 * Primary keys
 * Foreign keys
 * Constraints
 * Indexes
-* Relationships between entities
+* Entity relationships
 
 ### seed_data.sql
 
-Provides initial data for:
+Responsible for inserting initial data:
 
-* Lookup tables
+* Lookup values
 * Application statuses
 * Employment types
 * Interview types
@@ -139,19 +141,23 @@ DTO
 Mapper
 ```
 
-The project structure also contains placeholders for future layers:
+Entity and API models are separated using DTOs and dedicated mapper classes.
+
+The next backend development stages are:
 
 ```text
-Service
-  |
-Controller
+Mapper integration into Services
+            |
+      Service Layer
+            |
+    Controller Layer
+            |
+        REST API
 ```
-
-These layers will contain business logic and REST API endpoints in the next development stages.
 
 ---
 
-# Current Backend Implementation
+# Backend Implementation Status
 
 ## Completed
 
@@ -264,18 +270,35 @@ The frontend application is initialized using:
 
 Current frontend status:
 
-* Project setup completed
-* Development environment configured
+* React project setup completed
+* TypeScript configuration completed
+* Vite development environment configured
 
-Planned frontend development:
+Future frontend development includes:
 
+* UI implementation
+* Backend API integration
 * Authentication screens
 * Dashboard
 * Job application management interface
 * Company and recruiter views
 * CV and cover letter management
 * Interview tracking interface
-* Backend API integration
+
+---
+
+# Testing
+
+Backend testing will be implemented gradually during development.
+
+Planned unit tests include:
+
+* Mapper tests
+* Service layer tests
+* Repository tests
+* Controller tests after REST API implementation
+
+The goal is to ensure reliability and maintainability as new backend layers are added.
 
 ---
 
@@ -319,13 +342,13 @@ npm run dev
 
 # Database Setup
 
-Configure PostgreSQL connection in:
+Configure PostgreSQL connection inside:
 
 ```text
 backend/src/main/resources/application.properties
 ```
 
-Execute the migration scripts:
+Execute:
 
 ```sql
 create_db.sql
@@ -341,26 +364,43 @@ seed_data.sql
 
 # Development Roadmap
 
-Upcoming development stages:
-
 ## Backend
 
-* Service layer implementation
-* Business logic implementation
-* REST API controllers
-* Request/Response validation
-* Exception handling
-* Authentication and authorization
+Upcoming tasks:
+
+* Complete mapper usage inside services
+* Implement service layer
+* Add business logic
+* Create REST controllers
+* Implement API endpoints
+* Add request/response validation
+* Add exception handling
+* Implement authentication and authorization
+
+## Testing
+
+Upcoming testing tasks:
+
+* Gradual creation of backend unit tests
+* Mapper testing
+* Service testing
+* Repository testing
+* Controller testing
 
 ## Frontend
 
-* UI implementation
-* API integration
-* User dashboard
-* Application management screens
-* Search and filtering functionality
+Upcoming tasks:
+
+* Build application UI
+* Connect frontend with backend APIs
+* Implement authentication flow
+* Create dashboard
+* Add job application management screens
+* Add search and filtering features
 
 ## Deployment
+
+Future tasks:
 
 * Docker support
 * Production configuration
