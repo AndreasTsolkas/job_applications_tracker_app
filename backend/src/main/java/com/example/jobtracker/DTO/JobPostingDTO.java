@@ -3,7 +3,6 @@ package com.example.jobtracker.DTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.LocalDate;
 
 @Getter
 @Setter
