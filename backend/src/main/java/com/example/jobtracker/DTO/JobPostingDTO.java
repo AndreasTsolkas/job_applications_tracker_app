@@ -18,13 +18,7 @@ public class JobPostingDTO {
 
     private String description;
 
-    private String requirements;
-
     private String location;
-
-    private String jobUrl;
-
-    private LocalDate postingDate;
 
     private Long companyId;
 
