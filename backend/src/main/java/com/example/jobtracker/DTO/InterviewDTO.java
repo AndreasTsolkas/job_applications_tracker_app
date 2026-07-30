@@ -15,15 +15,13 @@ public class InterviewDTO {
 
     private Long applicationId;
 
-    private Long interviewTypeId;
+    private Long typeId;
 
-    private Long interviewResultId;
+    private Long resultId;
 
-    private LocalDateTime interviewDate;
+    private LocalDateTime scheduledAt;
 
     private String notes;
 
     private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }
