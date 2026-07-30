@@ -15,13 +15,9 @@ public class ApplicationStatusHistoryDTO {
 
     private Long applicationId;
 
-    private Long applicationStatusId;
+    private Long statusId;
 
     private String notes;
 
     private LocalDateTime changedAt;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 }
