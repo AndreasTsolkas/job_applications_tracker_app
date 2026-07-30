@@ -1,8 +1,10 @@
-# Job Application Tracker
+# Job Applications Tracker
 
 A full-stack application for managing job applications, companies, job postings, CVs, cover letters, recruiters, and interview progress.
 
 The goal of this project is to provide a complete system for tracking the job application process, from discovering job opportunities to managing applications, interviews, and application status history.
+
+The project is currently under active development.
 
 ---
 
@@ -29,9 +31,11 @@ The goal of this project is to provide a complete system for tracking the job ap
 
 ---
 
-# Project Structure
+# Project Structure (Currently)
 
-```
+The current repository structure is:
+
+```text
 job_applications_tracker_app
 │
 ├── backend
@@ -73,7 +77,7 @@ job_applications_tracker_app
 
 The application uses PostgreSQL.
 
-The database model contains the following entities:
+The database model currently includes:
 
 * Users
 * Sectors
@@ -93,24 +97,24 @@ The database model contains the following entities:
 
 ## Database Migration Files
 
-The database setup is handled through SQL migration scripts.
+Database initialization is handled through SQL migration scripts.
 
 ### create_db.sql
 
-Responsible for creating:
+Creates:
 
 * Database tables
 * Primary keys
 * Foreign keys
 * Constraints
 * Indexes
-* Entity relationships
+* Relationships between entities
 
 ### seed_data.sql
 
-Responsible for inserting:
+Provides initial data for:
 
-* Initial lookup values
+* Lookup tables
 * Application statuses
 * Employment types
 * Interview types
@@ -119,35 +123,41 @@ Responsible for inserting:
 
 ---
 
-# Backend Architecture
+# Backend Architecture (Currently)
 
-The backend follows a layered Spring Boot architecture:
+The backend follows a layered Spring Boot architecture.
 
-```
-Controller
-     |
-Service
-     |
-Repository
-     |
+Current implemented layers:
+
+```text
 Entity
+  |
+Repository
+  |
+DTO
+  |
+Mapper
 ```
 
-DTO conversion is handled through a dedicated mapper layer:
+The project structure also contains placeholders for future layers:
 
-```
-Entity <----> Mapper <----> DTO
+```text
+Service
+  |
+Controller
 ```
 
-This approach separates database entities from API communication models and keeps the application easier to maintain.
+These layers will contain business logic and REST API endpoints in the next development stages.
 
 ---
 
-# Backend Implementation Status
+# Current Backend Implementation
 
 ## Completed
 
-* Spring Boot application setup
+The following backend components have been implemented:
+
+* Spring Boot project setup
 * PostgreSQL configuration
 * JPA/Hibernate entity mapping
 * Database model implementation
@@ -159,7 +169,7 @@ This approach separates database entities from API communication models and keep
 
 # Implemented Entities
 
-The following JPA entities have been implemented:
+The following JPA entities have been created:
 
 * AppUser
 * Sector
@@ -181,7 +191,7 @@ The following JPA entities have been implemented:
 
 # Implemented DTOs
 
-DTOs have been created for:
+DTO classes have been created for:
 
 * AppUser
 * Sector
@@ -203,7 +213,7 @@ DTOs have been created for:
 
 # Implemented Mappers
 
-The mapper layer contains:
+The mapper layer currently contains:
 
 * SectorMapper
 * CompanyMapper
@@ -224,7 +234,7 @@ The mapper layer contains:
 
 # Implemented Repositories
 
-Repositories have been created for:
+Repository interfaces currently include:
 
 * AppUserRepository
 * SectorRepository
@@ -244,25 +254,28 @@ Repositories have been created for:
 
 ---
 
-# Frontend
+# Frontend (Currently)
 
-The frontend application is built with React, TypeScript and Vite.
+The frontend application is initialized using:
 
-Current frontend setup includes:
+* React
+* TypeScript
+* Vite
 
-* React project structure
-* TypeScript configuration
-* Vite development environment
+Current frontend status:
 
-Planned frontend features:
+* Project setup completed
+* Development environment configured
 
-* User authentication interface
+Planned frontend development:
+
+* Authentication screens
 * Dashboard
-* Job application management screens
+* Job application management interface
 * Company and recruiter views
 * CV and cover letter management
 * Interview tracking interface
-* Communication with backend REST APIs
+* Backend API integration
 
 ---
 
@@ -279,8 +292,6 @@ Run the Spring Boot application:
 ```bash
 ./mvnw spring-boot:run
 ```
-
-The backend will start using the configured PostgreSQL database.
 
 ---
 
@@ -308,9 +319,9 @@ npm run dev
 
 # Database Setup
 
-Configure PostgreSQL connection inside:
+Configure PostgreSQL connection in:
 
-```
+```text
 backend/src/main/resources/application.properties
 ```
 
@@ -330,7 +341,9 @@ seed_data.sql
 
 # Development Roadmap
 
-## Next Steps
+Upcoming development stages:
+
+## Backend
 
 * Service layer implementation
 * Business logic implementation
@@ -338,16 +351,23 @@ seed_data.sql
 * Request/Response validation
 * Exception handling
 * Authentication and authorization
-* Frontend-backend integration
-* Job application dashboard
+
+## Frontend
+
+* UI implementation
+* API integration
+* User dashboard
+* Application management screens
 * Search and filtering functionality
-* Docker deployment
+
+## Deployment
+
+* Docker support
+* Production configuration
+* Deployment setup
 
 ---
 
 # License
 
 This project is for educational and development purposes.
-
-```
-```
