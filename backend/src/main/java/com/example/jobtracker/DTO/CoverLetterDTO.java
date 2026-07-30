@@ -13,11 +13,13 @@ public class CoverLetterDTO {
 
     private Long id;
 
-    private String title;
+    private Long userId;
+
+    private String name;
 
     private String content;
 
-    private Long userId;
+    private String filePath;
 
     private LocalDateTime createdAt;
 
