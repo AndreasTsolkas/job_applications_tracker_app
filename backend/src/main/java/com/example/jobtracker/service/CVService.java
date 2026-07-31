@@ -2,7 +2,9 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.jobtracker.DTO.CVDTO;
 import com.example.jobtracker.entity.CV;
+import com.example.jobtracker.mapper.CVMapper;
 import com.example.jobtracker.repository.CVRepository;
 
 import java.util.List;
@@ -17,28 +19,45 @@ public class CVService {
     }
 
 
-    public List<CV> findAll() {
-        return cvRepository.findAll();
+    public List<CVDTO> findAll() {
+
+        return cvRepository.findAll()
+                .stream()
+                .map(CVMapper::toDTO)
+                .toList();
     }
 
 
-    public CV findById(Long id) {
-        return cvRepository.findById(id)
+    public CVDTO findById(Long id) {
+
+        CV cv = cvRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("CV not found"));
+
+        return CVMapper.toDTO(cv);
     }
 
 
-    public List<CV> findByUserId(Long userId) {
-        return cvRepository.findByUserId(userId);
+    public List<CVDTO> findByUserId(Long userId) {
+
+        return cvRepository.findByUserId(userId)
+                .stream()
+                .map(CVMapper::toDTO)
+                .toList();
     }
 
 
-    public CV save(CV cv) {
-        return cvRepository.save(cv);
+    public CVDTO save(CVDTO dto) {
+
+        CV cv = CVMapper.toEntity(dto);
+
+        CV savedCV = cvRepository.save(cv);
+
+        return CVMapper.toDTO(savedCV);
     }
 
 
     public void delete(Long id) {
+
         cvRepository.deleteById(id);
     }
 }

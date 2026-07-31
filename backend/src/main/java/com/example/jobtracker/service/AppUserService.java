@@ -2,7 +2,8 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.jobtracker.entity.AppUser;
+import com.example.jobtracker.DTO.AppUserDTO;
+import com.example.jobtracker.mapper.AppUserMapper;
 import com.example.jobtracker.repository.AppUserRepository;
 
 import java.util.List;
@@ -18,7 +19,11 @@ public class AppUserService {
     }
 
 
-    public List<AppUser> getAllUsers() {
-        return appUserRepository.findAll();
+    public List<AppUserDTO> getAllUsers() {
+
+        return appUserRepository.findAll()
+                .stream()
+                .map(AppUserMapper::toDTO)
+                .toList();
     }
 }

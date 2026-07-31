@@ -2,7 +2,9 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.jobtracker.DTO.InterviewTypeDTO;
 import com.example.jobtracker.entity.InterviewType;
+import com.example.jobtracker.mapper.InterviewTypeMapper;
 import com.example.jobtracker.repository.InterviewTypeRepository;
 
 import java.util.List;
@@ -17,23 +19,36 @@ public class InterviewTypeService {
     }
 
 
-    public List<InterviewType> findAll() {
-        return interviewTypeRepository.findAll();
+    public List<InterviewTypeDTO> findAll() {
+
+        return interviewTypeRepository.findAll()
+                .stream()
+                .map(InterviewTypeMapper::toDTO)
+                .toList();
     }
 
 
-    public InterviewType findById(Long id) {
-        return interviewTypeRepository.findById(id)
+    public InterviewTypeDTO findById(Long id) {
+
+        InterviewType type = interviewTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Interview type not found"));
+
+        return InterviewTypeMapper.toDTO(type);
     }
 
 
-    public InterviewType save(InterviewType interviewType) {
-        return interviewTypeRepository.save(interviewType);
+    public InterviewTypeDTO save(InterviewTypeDTO dto) {
+
+        InterviewType type = InterviewTypeMapper.toEntity(dto);
+
+        InterviewType savedType = interviewTypeRepository.save(type);
+
+        return InterviewTypeMapper.toDTO(savedType);
     }
 
 
     public void delete(Long id) {
+
         interviewTypeRepository.deleteById(id);
     }
 }

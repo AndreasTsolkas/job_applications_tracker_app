@@ -2,7 +2,9 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.jobtracker.DTO.EmploymentTypeDTO;
 import com.example.jobtracker.entity.EmploymentType;
+import com.example.jobtracker.mapper.EmploymentTypeMapper;
 import com.example.jobtracker.repository.EmploymentTypeRepository;
 
 import java.util.List;
@@ -17,23 +19,36 @@ public class EmploymentTypeService {
     }
 
 
-    public List<EmploymentType> findAll() {
-        return employmentTypeRepository.findAll();
+    public List<EmploymentTypeDTO> findAll() {
+
+        return employmentTypeRepository.findAll()
+                .stream()
+                .map(EmploymentTypeMapper::toDTO)
+                .toList();
     }
 
 
-    public EmploymentType findById(Long id) {
-        return employmentTypeRepository.findById(id)
+    public EmploymentTypeDTO findById(Long id) {
+
+        EmploymentType employmentType = employmentTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employment type not found"));
+
+        return EmploymentTypeMapper.toDTO(employmentType);
     }
 
 
-    public EmploymentType save(EmploymentType employmentType) {
-        return employmentTypeRepository.save(employmentType);
+    public EmploymentTypeDTO save(EmploymentTypeDTO dto) {
+
+        EmploymentType employmentType = EmploymentTypeMapper.toEntity(dto);
+
+        EmploymentType savedEmploymentType = employmentTypeRepository.save(employmentType);
+
+        return EmploymentTypeMapper.toDTO(savedEmploymentType);
     }
 
 
     public void delete(Long id) {
+
         employmentTypeRepository.deleteById(id);
     }
 }

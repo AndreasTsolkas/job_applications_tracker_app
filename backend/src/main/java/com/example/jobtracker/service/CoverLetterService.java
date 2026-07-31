@@ -2,7 +2,9 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.jobtracker.DTO.CoverLetterDTO;
 import com.example.jobtracker.entity.CoverLetter;
+import com.example.jobtracker.mapper.CoverLetterMapper;
 import com.example.jobtracker.repository.CoverLetterRepository;
 
 import java.util.List;
@@ -17,28 +19,45 @@ public class CoverLetterService {
     }
 
 
-    public List<CoverLetter> findAll() {
-        return coverLetterRepository.findAll();
+    public List<CoverLetterDTO> findAll() {
+
+        return coverLetterRepository.findAll()
+                .stream()
+                .map(CoverLetterMapper::toDTO)
+                .toList();
     }
 
 
-    public CoverLetter findById(Long id) {
-        return coverLetterRepository.findById(id)
+    public CoverLetterDTO findById(Long id) {
+
+        CoverLetter coverLetter = coverLetterRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cover letter not found"));
+
+        return CoverLetterMapper.toDTO(coverLetter);
     }
 
 
-    public List<CoverLetter> findByUserId(Long userId) {
-        return coverLetterRepository.findByUserId(userId);
+    public List<CoverLetterDTO> findByUserId(Long userId) {
+
+        return coverLetterRepository.findByUserId(userId)
+                .stream()
+                .map(CoverLetterMapper::toDTO)
+                .toList();
     }
 
 
-    public CoverLetter save(CoverLetter coverLetter) {
-        return coverLetterRepository.save(coverLetter);
+    public CoverLetterDTO save(CoverLetterDTO dto) {
+
+        CoverLetter coverLetter = CoverLetterMapper.toEntity(dto);
+
+        CoverLetter savedCoverLetter = coverLetterRepository.save(coverLetter);
+
+        return CoverLetterMapper.toDTO(savedCoverLetter);
     }
 
 
     public void delete(Long id) {
+
         coverLetterRepository.deleteById(id);
     }
 }

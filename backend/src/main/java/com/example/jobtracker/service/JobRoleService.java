@@ -2,7 +2,9 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.jobtracker.DTO.JobRoleDTO;
 import com.example.jobtracker.entity.JobRole;
+import com.example.jobtracker.mapper.JobRoleMapper;
 import com.example.jobtracker.repository.JobRoleRepository;
 
 import java.util.List;
@@ -17,23 +19,36 @@ public class JobRoleService {
     }
 
 
-    public List<JobRole> findAll() {
-        return jobRoleRepository.findAll();
+    public List<JobRoleDTO> findAll() {
+
+        return jobRoleRepository.findAll()
+                .stream()
+                .map(JobRoleMapper::toDTO)
+                .toList();
     }
 
 
-    public JobRole findById(Long id) {
-        return jobRoleRepository.findById(id)
+    public JobRoleDTO findById(Long id) {
+
+        JobRole jobRole = jobRoleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job role not found"));
+
+        return JobRoleMapper.toDTO(jobRole);
     }
 
 
-    public JobRole save(JobRole jobRole) {
-        return jobRoleRepository.save(jobRole);
+    public JobRoleDTO save(JobRoleDTO dto) {
+
+        JobRole jobRole = JobRoleMapper.toEntity(dto);
+
+        JobRole savedJobRole = jobRoleRepository.save(jobRole);
+
+        return JobRoleMapper.toDTO(savedJobRole);
     }
 
 
     public void delete(Long id) {
+
         jobRoleRepository.deleteById(id);
     }
 }

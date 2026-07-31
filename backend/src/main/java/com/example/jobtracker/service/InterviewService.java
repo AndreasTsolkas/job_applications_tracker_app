@@ -2,7 +2,9 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.jobtracker.DTO.InterviewDTO;
 import com.example.jobtracker.entity.Interview;
+import com.example.jobtracker.mapper.InterviewMapper;
 import com.example.jobtracker.repository.InterviewRepository;
 
 import java.util.List;
@@ -17,28 +19,45 @@ public class InterviewService {
     }
 
 
-    public List<Interview> findAll() {
-        return interviewRepository.findAll();
+    public List<InterviewDTO> findAll() {
+
+        return interviewRepository.findAll()
+                .stream()
+                .map(InterviewMapper::toDTO)
+                .toList();
     }
 
 
-    public Interview findById(Long id) {
-        return interviewRepository.findById(id)
+    public InterviewDTO findById(Long id) {
+
+        Interview interview = interviewRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Interview not found"));
+
+        return InterviewMapper.toDTO(interview);
     }
 
 
-    public List<Interview> findByApplicationId(Long applicationId) {
-        return interviewRepository.findByApplicationId(applicationId);
+    public List<InterviewDTO> findByApplicationId(Long applicationId) {
+
+        return interviewRepository.findByApplicationId(applicationId)
+                .stream()
+                .map(InterviewMapper::toDTO)
+                .toList();
     }
 
 
-    public Interview save(Interview interview) {
-        return interviewRepository.save(interview);
+    public InterviewDTO save(InterviewDTO dto) {
+
+        Interview interview = InterviewMapper.toEntity(dto);
+
+        Interview savedInterview = interviewRepository.save(interview);
+
+        return InterviewMapper.toDTO(savedInterview);
     }
 
 
     public void delete(Long id) {
+
         interviewRepository.deleteById(id);
     }
 }
