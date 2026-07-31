@@ -2,7 +2,9 @@ package com.example.jobtracker.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.jobtracker.DTO.ApplicationDTO;
 import com.example.jobtracker.entity.Application;
+import com.example.jobtracker.mapper.ApplicationMapper;
 import com.example.jobtracker.repository.ApplicationRepository;
 
 import java.util.List;
@@ -17,38 +19,63 @@ public class ApplicationService {
     }
 
 
-    public List<Application> findAll() {
-        return applicationRepository.findAll();
+    public List<ApplicationDTO> findAll() {
+
+        return applicationRepository.findAll()
+                .stream()
+                .map(ApplicationMapper::toDTO)
+                .toList();
     }
 
 
-    public Application findById(Long id) {
-        return applicationRepository.findById(id)
+    public ApplicationDTO findById(Long id) {
+
+        Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        return ApplicationMapper.toDTO(application);
     }
 
 
-    public List<Application> findByUserId(Long userId) {
-        return applicationRepository.findByUserId(userId);
+    public List<ApplicationDTO> findByUserId(Long userId) {
+
+        return applicationRepository.findByUserId(userId)
+                .stream()
+                .map(ApplicationMapper::toDTO)
+                .toList();
     }
 
 
-    public List<Application> findByStatusId(Long statusId) {
-        return applicationRepository.findByStatusId(statusId);
+    public List<ApplicationDTO> findByStatusId(Long statusId) {
+
+        return applicationRepository.findByStatusId(statusId)
+                .stream()
+                .map(ApplicationMapper::toDTO)
+                .toList();
     }
 
 
-    public List<Application> findByJobPostingId(Long jobPostingId) {
-        return applicationRepository.findByJobPostingId(jobPostingId);
+    public List<ApplicationDTO> findByJobPostingId(Long jobPostingId) {
+
+        return applicationRepository.findByJobPostingId(jobPostingId)
+                .stream()
+                .map(ApplicationMapper::toDTO)
+                .toList();
     }
 
 
-    public Application save(Application application) {
-        return applicationRepository.save(application);
+    public ApplicationDTO save(ApplicationDTO dto) {
+
+        Application application = ApplicationMapper.toEntity(dto);
+
+        Application savedApplication = applicationRepository.save(application);
+
+        return ApplicationMapper.toDTO(savedApplication);
     }
 
 
     public void delete(Long id) {
+
         applicationRepository.deleteById(id);
     }
 }
