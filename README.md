@@ -71,7 +71,7 @@ job_applications_tracker_app
 └── README.md
 ```
 
-The project is currently in the backend foundation stage.
+The project is currently in the backend REST API foundation stage.
 
 ---
 
@@ -129,7 +129,7 @@ Responsible for inserting initial data:
 
 The backend follows a layered Spring Boot architecture.
 
-Current implemented layers:
+Current architecture:
 
 ```text
 Entity
@@ -139,21 +139,25 @@ Repository
 DTO
   |
 Mapper
+  |
+Service
+  |
+Controller
+  |
+REST API
 ```
 
-Entity and API models are separated using DTOs and dedicated mapper classes.
+The application uses DTOs to separate the persistence layer from API communication.
 
-The next backend development stages are:
+Dedicated mapper classes are responsible for converting:
 
-```text
-Mapper integration into Services
-            |
-      Service Layer
-            |
-    Controller Layer
-            |
-        REST API
 ```
+Entity <-> DTO
+```
+
+Services handle business logic and repository communication.
+
+Controllers expose REST endpoints using DTO request and response objects.
 
 ---
 
@@ -170,6 +174,9 @@ The following backend components have been implemented:
 * Repository layer
 * DTO layer
 * Mapper layer
+* Service layer
+* REST Controller layer
+* Initial REST API endpoints
 
 ---
 
@@ -238,6 +245,67 @@ The mapper layer currently contains:
 
 ---
 
+# Implemented Services
+
+All main services have been updated to work with DTOs and mapper classes.
+
+Implemented services:
+
+* AppUserService
+* SectorService
+* CompanyService
+* RecruiterService
+* JobRoleService
+* EmploymentTypeService
+* JobPostingService
+* CVService
+* CoverLetterService
+* ApplicationStatusService
+* ApplicationService
+* ApplicationStatusHistoryService
+* InterviewTypeService
+* InterviewResultService
+* InterviewService
+
+Current service responsibilities:
+
+* Communicate with repositories
+* Convert entities using mappers
+* Return DTO responses
+* Accept DTO requests
+* Prepare business logic layer
+
+---
+
+# Implemented Controllers
+
+REST controllers have been created for:
+
+* SectorController
+* CompanyController
+* RecruiterController
+* JobRoleController
+* EmploymentTypeController
+* JobPostingController
+* CVController
+* CoverLetterController
+* ApplicationStatusController
+* ApplicationController
+* ApplicationStatusHistoryController
+* InterviewTypeController
+* InterviewResultController
+* InterviewController
+
+Current API functionality includes:
+
+* Fetching all resources
+* Fetching resources by ID
+* Fetching resources by related entities
+* Creating resources
+* Deleting resources
+
+---
+
 # Implemented Repositories
 
 Repository interfaces currently include:
@@ -296,9 +364,15 @@ Planned unit tests include:
 * Mapper tests
 * Service layer tests
 * Repository tests
-* Controller tests after REST API implementation
+* Controller tests
 
-The goal is to ensure reliability and maintainability as new backend layers are added.
+Future testing tools:
+
+* JUnit
+* Mockito
+* MockMvc
+
+The goal is to ensure reliability, maintainability, and confidence as new features are added.
 
 ---
 
@@ -368,14 +442,13 @@ seed_data.sql
 
 Upcoming tasks:
 
-* Complete mapper usage inside services
-* Implement service layer
-* Add business logic
-* Create REST controllers
-* Implement API endpoints
-* Add request/response validation
-* Add exception handling
+* Improve service business logic
+* Add validation using Jakarta Validation
+* Add global exception handling
+* Improve API error responses
 * Implement authentication and authorization
+* Add advanced application workflow handling
+* Improve API documentation
 
 ## Testing
 
@@ -383,9 +456,9 @@ Upcoming testing tasks:
 
 * Gradual creation of backend unit tests
 * Mapper testing
-* Service testing
+* Service testing with Mockito
 * Repository testing
-* Controller testing
+* Controller testing with MockMvc
 
 ## Frontend
 
