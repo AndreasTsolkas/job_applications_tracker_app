@@ -3,6 +3,8 @@ package com.example.jobtracker.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +17,10 @@ import com.example.jobtracker.DTO.ApplicationDTO;
 import com.example.jobtracker.entity.AppUser;
 import com.example.jobtracker.entity.Application;
 import com.example.jobtracker.entity.ApplicationStatus;
+import com.example.jobtracker.entity.CV;
+import com.example.jobtracker.entity.CoverLetter;
 import com.example.jobtracker.entity.JobPosting;
+import com.example.jobtracker.entity.Recruiter;
 import com.example.jobtracker.repository.ApplicationRepository;
 
 
@@ -53,13 +58,6 @@ class ApplicationServiceTest {
 
 
 
-        ApplicationStatus status = ApplicationStatus.builder()
-                .id(2L)
-                .name("Applied")
-                .build();
-
-
-
         JobPosting jobPosting = JobPosting.builder()
                 .id(3L)
                 .title("Backend Developer")
@@ -67,11 +65,43 @@ class ApplicationServiceTest {
 
 
 
+        ApplicationStatus status = ApplicationStatus.builder()
+                .id(2L)
+                .name("Applied")
+                .build();
+
+
+
+        CV cv = CV.builder()
+                .id(4L)
+                .build();
+
+
+
+        CoverLetter coverLetter = CoverLetter.builder()
+                .id(5L)
+                .build();
+
+
+
+        Recruiter recruiter = Recruiter.builder()
+                .id(6L)
+                .build();
+
+
+
         return Application.builder()
                 .id(id)
                 .user(user)
-                .status(status)
                 .jobPosting(jobPosting)
+                .status(status)
+                .cv(cv)
+                .coverLetter(coverLetter)
+                .recruiter(recruiter)
+                .appliedDate(LocalDate.now())
+                .notes("Test application")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -81,13 +111,17 @@ class ApplicationServiceTest {
     void shouldReturnAllApplications() {
 
 
-        Application app1 = createApplication(1L);
-        Application app2 = createApplication(2L);
+        Application application1 =
+                createApplication(1L);
+
+
+        Application application2 =
+                createApplication(2L);
 
 
 
         when(applicationRepository.findAll())
-                .thenReturn(List.of(app1, app2));
+                .thenReturn(List.of(application1, application2));
 
 
 
@@ -112,14 +146,32 @@ class ApplicationServiceTest {
 
 
         assertEquals(
+                3L,
+                result.get(0).getJobPostingId()
+        );
+
+
+        assertEquals(
                 2L,
                 result.get(0).getStatusId()
         );
 
 
         assertEquals(
-                3L,
-                result.get(0).getJobPostingId()
+                4L,
+                result.get(0).getCvId()
+        );
+
+
+        assertEquals(
+                5L,
+                result.get(0).getCoverLetterId()
+        );
+
+
+        assertEquals(
+                6L,
+                result.get(0).getRecruiterId()
         );
 
 
@@ -160,6 +212,36 @@ class ApplicationServiceTest {
         assertEquals(
                 1L,
                 result.getUserId()
+        );
+
+
+        assertEquals(
+                3L,
+                result.getJobPostingId()
+        );
+
+
+        assertEquals(
+                2L,
+                result.getStatusId()
+        );
+
+
+        assertEquals(
+                4L,
+                result.getCvId()
+        );
+
+
+        assertEquals(
+                5L,
+                result.getCoverLetterId()
+        );
+
+
+        assertEquals(
+                6L,
+                result.getRecruiterId()
         );
 
 
@@ -317,8 +399,13 @@ class ApplicationServiceTest {
         ApplicationDTO dto =
                 ApplicationDTO.builder()
                         .userId(1L)
-                        .statusId(2L)
                         .jobPostingId(3L)
+                        .statusId(2L)
+                        .cvId(4L)
+                        .coverLetterId(5L)
+                        .recruiterId(6L)
+                        .appliedDate(LocalDate.now())
+                        .notes("Applied")
                         .build();
 
 
