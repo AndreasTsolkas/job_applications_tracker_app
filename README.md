@@ -492,7 +492,8 @@ Upcoming tasks:
 
 Upcoming testing tasks:
 
-* Complete Controller unit testing 
+* Complete Controller unit testing
+* Start integration testing
 
 ## Frontend
 
