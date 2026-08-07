@@ -357,24 +357,44 @@ Future frontend development includes:
 
 # Testing
 
-Backend testing will be implemented gradually during development.
+Backend testing has started and is being implemented gradually during development.
 
-Planned unit tests include:
+Implemented testing:
 
-* Mapper tests
-* Service layer tests
-* Repository tests
-* Controller tests
+* Mapper unit testing
+* Service unit testing
+* Controller unit testing foundation
+* JUnit 5 configuration
+* Mockito integration
+* MockMvc controller testing
+* Spring Boot MVC slice testing using @WebMvcTest
+* Service mocking using @MockitoBean
 
-Future testing tools:
+Completed controller tests:
 
-* JUnit
-* Mockito
-* MockMvc
+* AppUserControllerTest
+* SectorControllerTest
+* CompanyControllerTest
+* EmploymentTypeControllerTest
+* JobRoleControllerTest
 
-The goal is to ensure reliability, maintainability, and confidence as new features are added.
+Current controller tests verify:
 
----
+* HTTP status codes
+* JSON response structure
+* Request body serialization
+* Service interaction
+* Endpoint behavior
+
+The testing approach follows the principle:
+
+Controllers are tested independently by mocking their service dependencies instead of accessing the database.
+
+Future testing includes:
+
+* Remaining controller tests
+* Integration tests
+
 
 # Running the Backend
 
@@ -442,12 +462,16 @@ seed_data.sql
 
 Upcoming tasks:
 
+* Complete remaining controller unit tests
+* Add repository tests
 * Improve service business logic
 * Add validation using Jakarta Validation
 * Add global exception handling
 * Improve API error responses
 * Implement authentication and authorization
 * Add advanced application workflow handling
+* Implement dashboard and statistics features
+* Add search and filtering capabilities
 * Improve API documentation
 
 ## Testing
