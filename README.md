@@ -24,6 +24,9 @@ The project is currently under active development.
 * Hibernate
 * Maven
 * Lombok
+* JUnit
+* Mockito
+* MockMvc
 
 ## Database
 
@@ -40,33 +43,44 @@ job_applications_tracker_app
 │
 ├── backend
 │   ├── src
-│   │   └── main
-│   │       ├── java
-│   │       │   └── com.example.jobtracker
-│   │       │       │
-│   │       │       ├── entity
-│   │       │       ├── DTO
-│   │       │       ├── mapper
-│   │       │       ├── repository
-│   │       │       ├── service
-│   │       │       └── controller
-│   │       │
-│   │       └── resources
-│   │           └── application.properties
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── com.example.jobtracker
+│   │   │   │       │
+│   │   │   │       ├── entity
+│   │   │   │       ├── DTO
+│   │   │   │       ├── mapper
+│   │   │   │       ├── repository
+│   │   │   │       ├── service
+│   │   │   │       └── controller
+│   │   │   │
+│   │   │   └── resources
+│   │   │       ├── application.properties
+│   │   │       └── application-example.properties
+│   │   │
+│   │   └── test
+│   │       └── java
+│   │           └── com.example.jobtracker
+│   │               │
+│   │               ├── mapper
+│   │               ├── service
+│   │               └── controller
 │   │
+│   ├── compose.yaml
 │   ├── pom.xml
 │   └── mvnw
 │
 ├── frontend
 │   ├── src
 │   ├── public
+│   ├── index.html
 │   ├── package.json
 │   ├── tsconfig.json
 │   └── vite.config.ts
 │
 ├── database
-│   ├── create_db.sql
-│   └── seed_data.sql
+│   ├── create_db.sql.txt
+│   └── seed_data.sql.txt
 │
 └── README.md
 ```
@@ -281,6 +295,7 @@ Current service responsibilities:
 
 REST controllers have been created for:
 
+* AppUserController
 * SectorController
 * CompanyController
 * RecruiterController
@@ -445,13 +460,13 @@ backend/src/main/resources/application.properties
 Execute:
 
 ```sql
-create_db.sql
+create_db.sql.txt
 ```
 
 Then populate initial data:
 
 ```sql
-seed_data.sql
+seed_data.sql.txt
 ```
 
 ---
@@ -463,7 +478,6 @@ seed_data.sql
 Upcoming tasks:
 
 * Complete remaining controller unit tests
-* Add repository tests
 * Improve service business logic
 * Add validation using Jakarta Validation
 * Add global exception handling
@@ -478,11 +492,7 @@ Upcoming tasks:
 
 Upcoming testing tasks:
 
-* Gradual creation of backend unit tests
-* Mapper testing
-* Service testing with Mockito
-* Repository testing
-* Controller testing with MockMvc
+* Complete Controller unit testing 
 
 ## Frontend
 
