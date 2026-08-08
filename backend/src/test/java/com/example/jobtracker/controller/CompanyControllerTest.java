@@ -2,6 +2,7 @@ package com.example.jobtracker.controller;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -134,6 +135,36 @@ class CompanyControllerTest {
 
                 .andExpect(jsonPath("$.name")
                         .value("Tesla"));
+    }
+
+    @Test
+    void shouldUpdateCompany() throws Exception {
+
+        CompanyDTO request = CompanyDTO.builder()
+                .name("Alphabet")
+                .build();
+
+        CompanyDTO response = CompanyDTO.builder()
+                .id(1L)
+                .name("Alphabet")
+                .build();
+
+        when(companyService.update(eq(1L), any(CompanyDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/companies/1")
+
+                .contentType(MediaType.APPLICATION_JSON)
+
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.name")
+                        .value("Alphabet"));
     }
 
     @Test

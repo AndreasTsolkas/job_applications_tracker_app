@@ -232,6 +232,85 @@ class CompanyServiceTest {
 
 
     @Test
+    void shouldUpdateCompany() {
+
+
+        Sector sector = Sector.builder()
+                .id(1L)
+                .name("IT")
+                .build();
+
+
+        Company existingCompany = Company.builder()
+                .id(10L)
+                .name("Google")
+                .sector(sector)
+                .build();
+
+
+        CompanyDTO dto =
+                CompanyDTO.builder()
+                        .name("Alphabet")
+                        .sectorId(1L)
+                        .build();
+
+
+        when(companyRepository.findById(10L))
+                .thenReturn(Optional.of(existingCompany));
+
+        when(companyRepository.save(any(Company.class)))
+                .thenReturn(existingCompany);
+
+
+        CompanyDTO result =
+                companyService.update(10L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Alphabet",
+                result.getName()
+        );
+
+
+        verify(companyRepository)
+                .findById(10L);
+
+        verify(companyRepository)
+                .save(any(Company.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentCompany() {
+
+
+        CompanyDTO dto =
+                CompanyDTO.builder()
+                        .name("Netflix")
+                        .build();
+
+
+        when(companyRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> companyService.update(99L, dto)
+        );
+
+
+        verify(companyRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteCompany() {
 
 

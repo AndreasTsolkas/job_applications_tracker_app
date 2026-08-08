@@ -56,6 +56,17 @@ public class CompanyController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CompanyDTO> update(
+            @PathVariable Long id,
+            @RequestBody CompanyDTO dto) {
+
+        return ResponseEntity.ok(
+                companyService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

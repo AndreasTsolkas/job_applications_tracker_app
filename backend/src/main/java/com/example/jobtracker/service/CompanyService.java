@@ -56,6 +56,19 @@ public class CompanyService {
     }
 
 
+    public CompanyDTO update(Long id, CompanyDTO dto) {
+
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        CompanyMapper.updateEntity(company, dto);
+
+        Company updatedCompany = companyRepository.save(company);
+
+        return CompanyMapper.toDTO(updatedCompany);
+    }
+
+
     public void delete(Long id) {
 
         companyRepository.deleteById(id);

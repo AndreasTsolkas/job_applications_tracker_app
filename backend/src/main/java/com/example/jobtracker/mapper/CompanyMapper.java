@@ -4,6 +4,8 @@ import com.example.jobtracker.DTO.CompanyDTO;
 import com.example.jobtracker.entity.Company;
 import com.example.jobtracker.entity.Sector;
 
+import java.time.LocalDateTime;
+
 public class CompanyMapper {
 
     private CompanyMapper() {
@@ -53,5 +55,21 @@ public class CompanyMapper {
         }
 
         return company;
+    }
+
+
+    public static void updateEntity(Company company, CompanyDTO dto) {
+
+        company.setName(dto.getName());
+        company.setWebsite(dto.getWebsite());
+        company.setLocation(dto.getLocation());
+
+        if (dto.getSectorId() != null) {
+            Sector sector = new Sector();
+            sector.setId(dto.getSectorId());
+            company.setSector(sector);
+        }
+
+        company.setUpdatedAt(LocalDateTime.now());
     }
 }
