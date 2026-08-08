@@ -52,6 +52,17 @@ public class InterviewResultController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<InterviewResultDTO> update(
+            @PathVariable Long id,
+            @RequestBody InterviewResultDTO dto) {
+
+        return ResponseEntity.ok(
+                interviewResultService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

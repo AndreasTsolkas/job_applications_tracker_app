@@ -1,12 +1,14 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -112,6 +114,34 @@ class InterviewResultControllerTest {
 
                 .andExpect(jsonPath("$.name")
                         .value("Pending"));
+    }
+
+    @Test
+    void shouldUpdateInterviewResult() throws Exception {
+
+        InterviewResultDTO request = InterviewResultDTO.builder()
+                .name("Passed - Moving Forward")
+                .build();
+
+        InterviewResultDTO response = InterviewResultDTO.builder()
+                .id(1L)
+                .name("Passed - Moving Forward")
+                .build();
+
+        when(interviewResultService.update(eq(1L), any(InterviewResultDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/interview-results/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.name")
+                        .value("Passed - Moving Forward"));
     }
 
     @Test

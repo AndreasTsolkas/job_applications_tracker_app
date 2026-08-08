@@ -32,4 +32,10 @@ public class InterviewResultMapper {
                 .name(dto.getName())
                 .build();
     }
+
+
+    public static void updateEntity(InterviewResult interviewResult, InterviewResultDTO dto) {
+
+        interviewResult.setName(dto.getName());
+    }
 }

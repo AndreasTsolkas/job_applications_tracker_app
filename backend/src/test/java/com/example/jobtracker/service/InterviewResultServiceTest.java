@@ -210,6 +210,78 @@ class InterviewResultServiceTest {
 
 
     @Test
+    void shouldUpdateInterviewResult() {
+
+
+        InterviewResult existingResult =
+                InterviewResult.builder()
+                        .id(1L)
+                        .name("Passed")
+                        .build();
+
+
+        InterviewResultDTO dto =
+                InterviewResultDTO.builder()
+                        .name("Passed - Moving Forward")
+                        .build();
+
+
+        when(interviewResultRepository.findById(1L))
+                .thenReturn(Optional.of(existingResult));
+
+        when(interviewResultRepository.save(any(InterviewResult.class)))
+                .thenReturn(existingResult);
+
+
+        InterviewResultDTO result =
+                interviewResultService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Passed - Moving Forward",
+                result.getName()
+        );
+
+
+        verify(interviewResultRepository)
+                .findById(1L);
+
+        verify(interviewResultRepository)
+                .save(any(InterviewResult.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentInterviewResult() {
+
+
+        InterviewResultDTO dto =
+                InterviewResultDTO.builder()
+                        .name("Pending")
+                        .build();
+
+
+        when(interviewResultRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> interviewResultService.update(99L, dto)
+        );
+
+
+        verify(interviewResultRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteInterviewResult() {
 
 

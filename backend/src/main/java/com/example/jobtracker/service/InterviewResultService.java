@@ -43,6 +43,18 @@ public class InterviewResultService {
         return InterviewResultMapper.toDTO(savedResult);
     }
 
+    public InterviewResultDTO update(Long id, InterviewResultDTO dto) {
+
+        InterviewResult result = interviewResultRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Interview result not found"));
+
+        InterviewResultMapper.updateEntity(result, dto);
+
+        InterviewResult updatedResult = interviewResultRepository.save(result);
+
+        return InterviewResultMapper.toDTO(updatedResult);
+    }
+
     public void delete(Long id) {
 
         interviewResultRepository.deleteById(id);
