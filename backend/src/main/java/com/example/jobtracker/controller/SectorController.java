@@ -45,6 +45,17 @@ public class SectorController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SectorDTO> update(
+            @PathVariable Long id,
+            @RequestBody SectorDTO dto) {
+
+        return ResponseEntity.ok(
+                sectorService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

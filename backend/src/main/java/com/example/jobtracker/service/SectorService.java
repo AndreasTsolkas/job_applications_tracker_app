@@ -47,6 +47,19 @@ public class SectorService {
     }
 
 
+    public SectorDTO update(Long id, SectorDTO dto) {
+
+        Sector sector = sectorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sector not found"));
+
+        SectorMapper.updateEntity(sector, dto);
+
+        Sector updatedSector = sectorRepository.save(sector);
+
+        return SectorMapper.toDTO(updatedSector);
+    }
+
+
     public void delete(Long id) {
 
         sectorRepository.deleteById(id);

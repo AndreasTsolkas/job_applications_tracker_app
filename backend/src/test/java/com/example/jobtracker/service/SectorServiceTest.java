@@ -206,6 +206,78 @@ class SectorServiceTest {
 
 
     @Test
+    void shouldUpdateSector() {
+
+
+        Sector existingSector =
+                Sector.builder()
+                        .id(1L)
+                        .name("IT")
+                        .build();
+
+
+        SectorDTO dto =
+                SectorDTO.builder()
+                        .name("Information Technology")
+                        .build();
+
+
+        when(sectorRepository.findById(1L))
+                .thenReturn(Optional.of(existingSector));
+
+        when(sectorRepository.save(any(Sector.class)))
+                .thenReturn(existingSector);
+
+
+        SectorDTO result =
+                sectorService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Information Technology",
+                result.getName()
+        );
+
+
+        verify(sectorRepository)
+                .findById(1L);
+
+        verify(sectorRepository)
+                .save(any(Sector.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentSector() {
+
+
+        SectorDTO dto =
+                SectorDTO.builder()
+                        .name("Healthcare")
+                        .build();
+
+
+        when(sectorRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> sectorService.update(99L, dto)
+        );
+
+
+        verify(sectorRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteSector() {
 
 
