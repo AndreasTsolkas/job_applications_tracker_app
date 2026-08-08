@@ -56,6 +56,17 @@ public class RecruiterController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<RecruiterDTO> update(
+            @PathVariable Long id,
+            @RequestBody RecruiterDTO dto) {
+
+        return ResponseEntity.ok(
+                recruiterService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

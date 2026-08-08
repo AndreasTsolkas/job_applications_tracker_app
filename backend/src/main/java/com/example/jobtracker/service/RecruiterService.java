@@ -51,6 +51,18 @@ public class RecruiterService {
         return RecruiterMapper.toDTO(savedRecruiter);
     }
 
+    public RecruiterDTO update(Long id, RecruiterDTO dto) {
+
+        Recruiter recruiter = recruiterRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Recruiter not found"));
+
+        RecruiterMapper.updateEntity(recruiter, dto);
+
+        Recruiter updatedRecruiter = recruiterRepository.save(recruiter);
+
+        return RecruiterMapper.toDTO(updatedRecruiter);
+    }
+
     public void delete(Long id) {
 
         recruiterRepository.deleteById(id);

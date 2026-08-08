@@ -316,6 +316,87 @@ class RecruiterServiceTest {
 
 
     @Test
+    void shouldUpdateRecruiter() {
+
+
+        Company company = Company.builder()
+                .id(1L)
+                .name("Google")
+                .build();
+
+
+        Recruiter existingRecruiter = Recruiter.builder()
+                .id(10L)
+                .firstName("John")
+                .lastName("Smith")
+                .company(company)
+                .build();
+
+
+        RecruiterDTO dto =
+                RecruiterDTO.builder()
+                        .firstName("Jonathan")
+                        .lastName("Smith")
+                        .companyId(1L)
+                        .build();
+
+
+        when(recruiterRepository.findById(10L))
+                .thenReturn(Optional.of(existingRecruiter));
+
+        when(recruiterRepository.save(any(Recruiter.class)))
+                .thenReturn(existingRecruiter);
+
+
+        RecruiterDTO result =
+                recruiterService.update(10L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Jonathan",
+                result.getFirstName()
+        );
+
+
+        verify(recruiterRepository)
+                .findById(10L);
+
+        verify(recruiterRepository)
+                .save(any(Recruiter.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentRecruiter() {
+
+
+        RecruiterDTO dto =
+                RecruiterDTO.builder()
+                        .firstName("Chris")
+                        .build();
+
+
+        when(recruiterRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> recruiterService.update(99L, dto)
+        );
+
+
+        verify(recruiterRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteRecruiter() {
 
 

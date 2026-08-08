@@ -1,12 +1,14 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -157,6 +159,38 @@ class RecruiterControllerTest {
 
                 .andExpect(jsonPath("$.firstName")
                         .value("David"));
+    }
+
+    @Test
+    void shouldUpdateRecruiter() throws Exception {
+
+        RecruiterDTO request = RecruiterDTO.builder()
+                .firstName("Jonathan")
+                .lastName("Black")
+                .companyId(10L)
+                .build();
+
+        RecruiterDTO response = RecruiterDTO.builder()
+                .id(1L)
+                .firstName("Jonathan")
+                .lastName("Black")
+                .companyId(10L)
+                .build();
+
+        when(recruiterService.update(eq(1L), any(RecruiterDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/recruiters/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.firstName")
+                        .value("Jonathan"));
     }
 
     @Test

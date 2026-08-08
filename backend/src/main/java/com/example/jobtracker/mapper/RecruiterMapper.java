@@ -4,6 +4,8 @@ import com.example.jobtracker.DTO.RecruiterDTO;
 import com.example.jobtracker.entity.Company;
 import com.example.jobtracker.entity.Recruiter;
 
+import java.time.LocalDateTime;
+
 public class RecruiterMapper {
 
     private RecruiterMapper() {
@@ -55,5 +57,22 @@ public class RecruiterMapper {
         }
 
         return recruiter;
+    }
+
+
+    public static void updateEntity(Recruiter recruiter, RecruiterDTO dto) {
+
+        recruiter.setFirstName(dto.getFirstName());
+        recruiter.setLastName(dto.getLastName());
+        recruiter.setEmail(dto.getEmail());
+        recruiter.setLinkedinUrl(dto.getLinkedinUrl());
+
+        if (dto.getCompanyId() != null) {
+            Company company = new Company();
+            company.setId(dto.getCompanyId());
+            recruiter.setCompany(company);
+        }
+
+        recruiter.setUpdatedAt(LocalDateTime.now());
     }
 }
