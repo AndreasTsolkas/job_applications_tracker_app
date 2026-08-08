@@ -47,6 +47,19 @@ public class EmploymentTypeService {
     }
 
 
+    public EmploymentTypeDTO update(Long id, EmploymentTypeDTO dto) {
+
+        EmploymentType employmentType = employmentTypeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employment type not found"));
+
+        EmploymentTypeMapper.updateEntity(employmentType, dto);
+
+        EmploymentType updatedEmploymentType = employmentTypeRepository.save(employmentType);
+
+        return EmploymentTypeMapper.toDTO(updatedEmploymentType);
+    }
+
+
     public void delete(Long id) {
 
         employmentTypeRepository.deleteById(id);

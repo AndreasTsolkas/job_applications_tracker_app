@@ -50,6 +50,17 @@ public class EmploymentTypeController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<EmploymentTypeDTO> update(
+            @PathVariable Long id,
+            @RequestBody EmploymentTypeDTO dto) {
+
+        return ResponseEntity.ok(
+                employmentTypeService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

@@ -32,4 +32,10 @@ public class EmploymentTypeMapper {
                 .name(dto.getName())
                 .build();
     }
+
+
+    public static void updateEntity(EmploymentType employmentType, EmploymentTypeDTO dto) {
+
+        employmentType.setName(dto.getName());
+    }
 }

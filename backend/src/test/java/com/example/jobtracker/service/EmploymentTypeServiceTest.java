@@ -207,6 +207,77 @@ class EmploymentTypeServiceTest {
 
 
     @Test
+    void shouldUpdateEmploymentType() {
+
+
+        EmploymentType existingType = EmploymentType.builder()
+                .id(1L)
+                .name("Full Time")
+                .build();
+
+
+        EmploymentTypeDTO dto =
+                EmploymentTypeDTO.builder()
+                        .name("Full-Time")
+                        .build();
+
+
+        when(employmentTypeRepository.findById(1L))
+                .thenReturn(Optional.of(existingType));
+
+        when(employmentTypeRepository.save(any(EmploymentType.class)))
+                .thenReturn(existingType);
+
+
+        EmploymentTypeDTO result =
+                employmentTypeService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Full-Time",
+                result.getName()
+        );
+
+
+        verify(employmentTypeRepository)
+                .findById(1L);
+
+        verify(employmentTypeRepository)
+                .save(any(EmploymentType.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentEmploymentType() {
+
+
+        EmploymentTypeDTO dto =
+                EmploymentTypeDTO.builder()
+                        .name("Internship")
+                        .build();
+
+
+        when(employmentTypeRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> employmentTypeService.update(99L, dto)
+        );
+
+
+        verify(employmentTypeRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteEmploymentType() {
 
 
