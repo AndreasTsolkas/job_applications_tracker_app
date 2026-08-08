@@ -60,6 +60,17 @@ public class CoverLetterController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CoverLetterDTO> update(
+            @PathVariable Long id,
+            @RequestBody CoverLetterDTO dto) {
+
+        return ResponseEntity.ok(
+                coverLetterService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

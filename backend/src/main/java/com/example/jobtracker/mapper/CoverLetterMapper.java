@@ -4,6 +4,8 @@ import com.example.jobtracker.DTO.CoverLetterDTO;
 import com.example.jobtracker.entity.AppUser;
 import com.example.jobtracker.entity.CoverLetter;
 
+import java.time.LocalDateTime;
+
 public class CoverLetterMapper {
 
     private CoverLetterMapper() {
@@ -54,5 +56,21 @@ public class CoverLetterMapper {
         }
 
         return coverLetter;
+    }
+
+
+    public static void updateEntity(CoverLetter coverLetter, CoverLetterDTO dto) {
+
+        coverLetter.setName(dto.getName());
+        coverLetter.setContent(dto.getContent());
+        coverLetter.setFilePath(dto.getFilePath());
+
+        if (dto.getUserId() != null) {
+            AppUser user = new AppUser();
+            user.setId(dto.getUserId());
+            coverLetter.setUser(user);
+        }
+
+        coverLetter.setUpdatedAt(LocalDateTime.now());
     }
 }

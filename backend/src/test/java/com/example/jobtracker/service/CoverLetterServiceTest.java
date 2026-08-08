@@ -264,6 +264,77 @@ class CoverLetterServiceTest {
 
 
     @Test
+    void shouldUpdateCoverLetter() {
+
+
+        CoverLetter existingLetter =
+                createCoverLetter(1L);
+
+
+        CoverLetterDTO dto =
+                CoverLetterDTO.builder()
+                        .name("Backend Developer Letter v2")
+                        .content("Updated content")
+                        .userId(1L)
+                        .build();
+
+
+        when(coverLetterRepository.findById(1L))
+                .thenReturn(Optional.of(existingLetter));
+
+        when(coverLetterRepository.save(any(CoverLetter.class)))
+                .thenReturn(existingLetter);
+
+
+        CoverLetterDTO result =
+                coverLetterService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Backend Developer Letter v2",
+                result.getName()
+        );
+
+
+        verify(coverLetterRepository)
+                .findById(1L);
+
+        verify(coverLetterRepository)
+                .save(any(CoverLetter.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentCoverLetter() {
+
+
+        CoverLetterDTO dto =
+                CoverLetterDTO.builder()
+                        .name("My Cover Letter")
+                        .build();
+
+
+        when(coverLetterRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> coverLetterService.update(99L, dto)
+        );
+
+
+        verify(coverLetterRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteCoverLetter() {
 
 

@@ -56,6 +56,19 @@ public class CoverLetterService {
     }
 
 
+    public CoverLetterDTO update(Long id, CoverLetterDTO dto) {
+
+        CoverLetter coverLetter = coverLetterRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cover letter not found"));
+
+        CoverLetterMapper.updateEntity(coverLetter, dto);
+
+        CoverLetter updatedCoverLetter = coverLetterRepository.save(coverLetter);
+
+        return CoverLetterMapper.toDTO(updatedCoverLetter);
+    }
+
+
     public void delete(Long id) {
 
         coverLetterRepository.deleteById(id);
