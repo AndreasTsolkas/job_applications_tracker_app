@@ -6,6 +6,8 @@ import com.example.jobtracker.entity.EmploymentType;
 import com.example.jobtracker.entity.JobPosting;
 import com.example.jobtracker.entity.JobRole;
 
+import java.time.LocalDateTime;
+
 public class JobPostingMapper {
 
     private JobPostingMapper() {
@@ -81,5 +83,33 @@ public class JobPostingMapper {
 
 
         return jobPosting;
+    }
+
+
+    public static void updateEntity(JobPosting jobPosting, JobPostingDTO dto) {
+
+        jobPosting.setTitle(dto.getTitle());
+        jobPosting.setDescription(dto.getDescription());
+        jobPosting.setLocation(dto.getLocation());
+
+        if (dto.getCompanyId() != null) {
+            Company company = new Company();
+            company.setId(dto.getCompanyId());
+            jobPosting.setCompany(company);
+        }
+
+        if (dto.getJobRoleId() != null) {
+            JobRole jobRole = new JobRole();
+            jobRole.setId(dto.getJobRoleId());
+            jobPosting.setJobRole(jobRole);
+        }
+
+        if (dto.getEmploymentTypeId() != null) {
+            EmploymentType employmentType = new EmploymentType();
+            employmentType.setId(dto.getEmploymentTypeId());
+            jobPosting.setEmploymentType(employmentType);
+        }
+
+        jobPosting.setUpdatedAt(LocalDateTime.now());
     }
 }

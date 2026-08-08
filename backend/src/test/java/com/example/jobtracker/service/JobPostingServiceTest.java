@@ -329,6 +329,78 @@ class JobPostingServiceTest {
 
 
     @Test
+    void shouldUpdateJobPosting() {
+
+
+        JobPosting existingPosting =
+                createJobPosting(1L);
+
+
+        JobPostingDTO dto =
+                JobPostingDTO.builder()
+                        .title("Senior Java Developer")
+                        .companyId(1L)
+                        .jobRoleId(2L)
+                        .employmentTypeId(3L)
+                        .build();
+
+
+        when(jobPostingRepository.findById(1L))
+                .thenReturn(Optional.of(existingPosting));
+
+        when(jobPostingRepository.save(any(JobPosting.class)))
+                .thenReturn(existingPosting);
+
+
+        JobPostingDTO result =
+                jobPostingService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Senior Java Developer",
+                result.getTitle()
+        );
+
+
+        verify(jobPostingRepository)
+                .findById(1L);
+
+        verify(jobPostingRepository)
+                .save(any(JobPosting.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentJobPosting() {
+
+
+        JobPostingDTO dto =
+                JobPostingDTO.builder()
+                        .title("Backend Engineer")
+                        .build();
+
+
+        when(jobPostingRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> jobPostingService.update(99L, dto)
+        );
+
+
+        verify(jobPostingRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteJobPosting() {
 
 

@@ -70,6 +70,17 @@ public class JobPostingController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<JobPostingDTO> update(
+            @PathVariable Long id,
+            @RequestBody JobPostingDTO dto) {
+
+        return ResponseEntity.ok(
+                jobPostingService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

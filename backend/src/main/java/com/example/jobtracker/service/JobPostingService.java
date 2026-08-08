@@ -65,6 +65,19 @@ public class JobPostingService {
     }
 
 
+    public JobPostingDTO update(Long id, JobPostingDTO dto) {
+
+        JobPosting jobPosting = jobPostingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job posting not found"));
+
+        JobPostingMapper.updateEntity(jobPosting, dto);
+
+        JobPosting updatedJobPosting = jobPostingRepository.save(jobPosting);
+
+        return JobPostingMapper.toDTO(updatedJobPosting);
+    }
+
+
     public void delete(Long id) {
 
         jobPostingRepository.deleteById(id);
