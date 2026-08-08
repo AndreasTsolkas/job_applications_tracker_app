@@ -8,6 +8,120 @@ The project is currently under active development.
 
 ---
 
+# Features
+
+## Core Features
+
+* Account
+  * User registration / profile
+  * Authentication & login
+* Reference data
+  * Manage sectors (industries)
+  * Manage companies
+  * Manage recruiters (linked to a company)
+  * Manage job roles
+  * Manage employment types (full-time, contract, etc.)
+* Job posting tracking
+  * Job postings are entered manually by the user — there is no automated import from external job boards
+  * A job posting is added as its own standalone action, independent of applying to it
+  * Add / view / delete job postings (title, company, role, employment type)
+  * Browse postings by company or by role
+* Documents
+  * Manage CVs (upload / name, mark one active per user)
+  * Manage cover letters (upload / name / content, linked to user)
+* Application tracking
+  * Applying to a job posting is a separate step from creating the posting itself — an application always references an existing job posting
+  * Create an application for a job posting (attach a CV, a cover letter, optionally a recruiter)
+  * View all applications, filter by user / status / job posting
+  * Update application status (Applied → Interviewing → Offered → Rejected, etc.)
+  * Automatic status history logging whenever status changes
+  * Delete / withdraw an application
+  * Add notes to an application
+* Interview tracking
+  * Schedule an interview for an application (type: phone / technical / onsite, date/time)
+  * Record interview result (passed / failed / pending)
+  * View interview history per application
+
+## Planned Features
+
+* Dashboard & insights
+  * Overview of active applications by status
+  * Upcoming interviews
+  * Basic stats (applications sent, interview conversion rate, etc.)
+* Search & filtering
+  * Search / filter applications, postings, companies
+
+## Out of Scope
+
+No integrations with external systems or APIs (e.g. calendar sync, email parsing, cloud file storage, job board APIs) are planned at this time. The application is intended to remain self-contained.
+
+---
+
+# Workflows
+
+## Account
+
+1. User registers (name, email, etc.) → account created.
+2. User logs in.
+3. User views/updates their profile.
+
+## Reference Data
+
+*(sectors, companies, recruiters, job roles, employment types)*
+
+1. User adds a sector (name) — typically created ad hoc, when it's needed to categorize a company rather than upfront.
+2. User adds a company, optionally linking it to a sector.
+3. User adds a recruiter, linking them to a company.
+4. User adds a job role (title/category), used later when creating a job posting.
+5. User adds an employment type, if not already seeded (Full-time, Contract, etc.).
+6. User views/deletes any of these records as needed.
+
+## Job Postings
+
+1. User selects (or creates on the fly, via Reference Data) the company, job role, and employment type for the posting.
+2. User creates the job posting (title, company, role, employment type).
+3. User browses postings, filterable by company or by role.
+4. User deletes a posting they no longer want to track (e.g. position filled, no longer interested).
+
+## Documents
+
+1. User uploads a CV (name, file) → CV created.
+2. User marks a CV as the active one (others become inactive).
+3. User uploads a cover letter (name, content/file).
+4. User views/deletes CVs and cover letters.
+5. When creating an application, the user picks from these existing CVs/cover letters (feeds into the Applications workflow).
+
+## Applications
+
+1. User browses their tracked job postings and picks one to apply to.
+2. User selects a CV from their existing CVs (or uploads a new one first, via the Documents workflow).
+3. User optionally selects a cover letter and/or a recruiter.
+4. User submits the application (applied date, notes) → application is created with an initial status (e.g. "Applied").
+5. A status history entry is automatically recorded for that initial status.
+6. User views their applications, filterable by status / job posting.
+7. As the process moves forward, user updates the application's status (e.g. "Interviewing" → "Offered"/"Rejected") → each change automatically appends a new status history entry.
+8. User can add/edit notes on the application at any point.
+9. User can withdraw/delete the application.
+
+## Interviews
+
+1. User selects an application to schedule an interview for.
+2. User picks an interview type (phone/technical/onsite) — or creates a new one via Reference Data if it doesn't exist.
+3. User sets the scheduled date/time and adds notes → interview is created, linked to the application.
+4. After the interview happens, user records the result (passed/failed/pending), picking from existing interview results or creating a new one.
+5. User views the interview history for an application.
+6. User deletes an interview record if needed.
+
+## Dashboard
+
+*(planned — not yet detailed)*
+
+## Search
+
+*(planned — not yet detailed)*
+
+---
+
 # Technologies
 
 ## Frontend
