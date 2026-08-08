@@ -441,6 +441,84 @@ class ApplicationServiceTest {
 
 
     @Test
+    void shouldUpdateApplication() {
+
+
+        Application existingApplication =
+                createApplication(1L);
+
+
+        ApplicationDTO dto =
+                ApplicationDTO.builder()
+                        .userId(1L)
+                        .jobPostingId(3L)
+                        .statusId(2L)
+                        .cvId(4L)
+                        .coverLetterId(5L)
+                        .recruiterId(6L)
+                        .appliedDate(LocalDate.now())
+                        .notes("Updated notes")
+                        .build();
+
+
+        when(applicationRepository.findById(1L))
+                .thenReturn(Optional.of(existingApplication));
+
+        when(applicationRepository.save(any(Application.class)))
+                .thenReturn(existingApplication);
+
+
+        ApplicationDTO result =
+                applicationService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Updated notes",
+                result.getNotes()
+        );
+
+
+        verify(applicationRepository)
+                .findById(1L);
+
+        verify(applicationRepository)
+                .save(any(Application.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentApplication() {
+
+
+        ApplicationDTO dto =
+                ApplicationDTO.builder()
+                        .userId(1L)
+                        .jobPostingId(3L)
+                        .statusId(2L)
+                        .build();
+
+
+        when(applicationRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> applicationService.update(99L, dto)
+        );
+
+
+        verify(applicationRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteApplication() {
 
 

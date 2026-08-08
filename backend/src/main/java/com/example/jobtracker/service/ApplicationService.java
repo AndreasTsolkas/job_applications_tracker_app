@@ -74,6 +74,19 @@ public class ApplicationService {
     }
 
 
+    public ApplicationDTO update(Long id, ApplicationDTO dto) {
+
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        ApplicationMapper.updateEntity(application, dto);
+
+        Application updatedApplication = applicationRepository.save(application);
+
+        return ApplicationMapper.toDTO(updatedApplication);
+    }
+
+
     public void delete(Long id) {
 
         applicationRepository.deleteById(id);

@@ -80,6 +80,17 @@ public class ApplicationController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApplicationDTO> update(
+            @PathVariable Long id,
+            @RequestBody ApplicationDTO dto) {
+
+        return ResponseEntity.ok(
+                applicationService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

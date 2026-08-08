@@ -1,12 +1,14 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -203,6 +205,40 @@ class ApplicationControllerTest {
 
                 .andExpect(jsonPath("$.userId")
                         .value(1));
+    }
+
+    @Test
+    void shouldUpdateApplication() throws Exception {
+
+        ApplicationDTO request = ApplicationDTO.builder()
+                .userId(1L)
+                .jobPostingId(1L)
+                .statusId(2L)
+                .notes("Updated notes")
+                .build();
+
+        ApplicationDTO response = ApplicationDTO.builder()
+                .id(1L)
+                .userId(1L)
+                .jobPostingId(1L)
+                .statusId(2L)
+                .notes("Updated notes")
+                .build();
+
+        when(applicationService.update(eq(1L), any(ApplicationDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/applications/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.statusId")
+                        .value(2));
     }
 
     @Test
