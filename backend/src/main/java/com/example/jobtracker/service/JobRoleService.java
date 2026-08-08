@@ -47,6 +47,19 @@ public class JobRoleService {
     }
 
 
+    public JobRoleDTO update(Long id, JobRoleDTO dto) {
+
+        JobRole jobRole = jobRoleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job role not found"));
+
+        JobRoleMapper.updateEntity(jobRole, dto);
+
+        JobRole updatedJobRole = jobRoleRepository.save(jobRole);
+
+        return JobRoleMapper.toDTO(updatedJobRole);
+    }
+
+
     public void delete(Long id) {
 
         jobRoleRepository.deleteById(id);

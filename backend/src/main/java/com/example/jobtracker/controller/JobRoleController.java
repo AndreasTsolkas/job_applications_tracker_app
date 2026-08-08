@@ -46,6 +46,17 @@ public class JobRoleController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<JobRoleDTO> update(
+            @PathVariable Long id,
+            @RequestBody JobRoleDTO dto) {
+
+        return ResponseEntity.ok(
+                jobRoleService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

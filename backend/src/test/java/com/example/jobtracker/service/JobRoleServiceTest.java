@@ -207,6 +207,77 @@ class JobRoleServiceTest {
 
 
     @Test
+    void shouldUpdateJobRole() {
+
+
+        JobRole existingRole = JobRole.builder()
+                .id(1L)
+                .name("Backend Developer")
+                .build();
+
+
+        JobRoleDTO dto =
+                JobRoleDTO.builder()
+                        .name("Senior Backend Developer")
+                        .build();
+
+
+        when(jobRoleRepository.findById(1L))
+                .thenReturn(Optional.of(existingRole));
+
+        when(jobRoleRepository.save(any(JobRole.class)))
+                .thenReturn(existingRole);
+
+
+        JobRoleDTO result =
+                jobRoleService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Senior Backend Developer",
+                result.getName()
+        );
+
+
+        verify(jobRoleRepository)
+                .findById(1L);
+
+        verify(jobRoleRepository)
+                .save(any(JobRole.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentJobRole() {
+
+
+        JobRoleDTO dto =
+                JobRoleDTO.builder()
+                        .name("Data Engineer")
+                        .build();
+
+
+        when(jobRoleRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> jobRoleService.update(99L, dto)
+        );
+
+
+        verify(jobRoleRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteJobRole() {
 
 

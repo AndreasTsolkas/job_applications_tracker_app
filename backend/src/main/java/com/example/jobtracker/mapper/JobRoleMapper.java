@@ -3,6 +3,8 @@ package com.example.jobtracker.mapper;
 import com.example.jobtracker.DTO.JobRoleDTO;
 import com.example.jobtracker.entity.JobRole;
 
+import java.time.LocalDateTime;
+
 public class JobRoleMapper {
 
     private JobRoleMapper() {
@@ -37,5 +39,13 @@ public class JobRoleMapper {
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .build();
+    }
+
+
+    public static void updateEntity(JobRole jobRole, JobRoleDTO dto) {
+
+        jobRole.setName(dto.getName());
+        jobRole.setDescription(dto.getDescription());
+        jobRole.setUpdatedAt(LocalDateTime.now());
     }
 }

@@ -1,11 +1,13 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -111,6 +113,36 @@ class JobRoleControllerTest {
 
                 .andExpect(jsonPath("$.name")
                         .value("Frontend Developer"));
+    }
+
+    @Test
+    void shouldUpdateJobRole() throws Exception {
+
+        JobRoleDTO request = JobRoleDTO.builder()
+                .name("Senior Backend Developer")
+                .build();
+
+        JobRoleDTO response = JobRoleDTO.builder()
+                .id(1L)
+                .name("Senior Backend Developer")
+                .build();
+
+        when(jobRoleService.update(eq(1L), any(JobRoleDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/job-roles/1")
+
+                .contentType(MediaType.APPLICATION_JSON)
+
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.name")
+                        .value("Senior Backend Developer"));
     }
 
     @Test
