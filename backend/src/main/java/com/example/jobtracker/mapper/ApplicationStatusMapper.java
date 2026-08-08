@@ -32,4 +32,10 @@ public class ApplicationStatusMapper {
                 .name(dto.getName())
                 .build();
     }
+
+
+    public static void updateEntity(ApplicationStatus applicationStatus, ApplicationStatusDTO dto) {
+
+        applicationStatus.setName(dto.getName());
+    }
 }

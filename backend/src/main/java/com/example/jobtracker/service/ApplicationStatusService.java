@@ -48,6 +48,20 @@ public class ApplicationStatusService {
     }
 
 
+    public ApplicationStatusDTO update(Long id, ApplicationStatusDTO dto) {
+
+        ApplicationStatus applicationStatus = applicationStatusRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application status not found"));
+
+        ApplicationStatusMapper.updateEntity(applicationStatus, dto);
+
+        ApplicationStatus updatedApplicationStatus =
+                applicationStatusRepository.save(applicationStatus);
+
+        return ApplicationStatusMapper.toDTO(updatedApplicationStatus);
+    }
+
+
     public void delete(Long id) {
 
         applicationStatusRepository.deleteById(id);

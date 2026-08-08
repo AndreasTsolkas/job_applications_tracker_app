@@ -52,6 +52,17 @@ public class ApplicationStatusController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApplicationStatusDTO> update(
+            @PathVariable Long id,
+            @RequestBody ApplicationStatusDTO dto) {
+
+        return ResponseEntity.ok(
+                applicationStatusService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

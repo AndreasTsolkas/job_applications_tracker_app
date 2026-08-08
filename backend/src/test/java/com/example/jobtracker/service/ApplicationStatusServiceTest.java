@@ -210,6 +210,78 @@ class ApplicationStatusServiceTest {
 
 
     @Test
+    void shouldUpdateApplicationStatus() {
+
+
+        ApplicationStatus existingStatus =
+                ApplicationStatus.builder()
+                        .id(1L)
+                        .name("Applied")
+                        .build();
+
+
+        ApplicationStatusDTO dto =
+                ApplicationStatusDTO.builder()
+                        .name("Application Sent")
+                        .build();
+
+
+        when(applicationStatusRepository.findById(1L))
+                .thenReturn(Optional.of(existingStatus));
+
+        when(applicationStatusRepository.save(any(ApplicationStatus.class)))
+                .thenReturn(existingStatus);
+
+
+        ApplicationStatusDTO result =
+                applicationStatusService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Application Sent",
+                result.getName()
+        );
+
+
+        verify(applicationStatusRepository)
+                .findById(1L);
+
+        verify(applicationStatusRepository)
+                .save(any(ApplicationStatus.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentApplicationStatus() {
+
+
+        ApplicationStatusDTO dto =
+                ApplicationStatusDTO.builder()
+                        .name("Rejected")
+                        .build();
+
+
+        when(applicationStatusRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> applicationStatusService.update(99L, dto)
+        );
+
+
+        verify(applicationStatusRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteApplicationStatus() {
 
 
