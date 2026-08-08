@@ -17,11 +17,13 @@ import com.example.jobtracker.DTO.ApplicationDTO;
 import com.example.jobtracker.entity.AppUser;
 import com.example.jobtracker.entity.Application;
 import com.example.jobtracker.entity.ApplicationStatus;
+import com.example.jobtracker.entity.ApplicationStatusHistory;
 import com.example.jobtracker.entity.CV;
 import com.example.jobtracker.entity.CoverLetter;
 import com.example.jobtracker.entity.JobPosting;
 import com.example.jobtracker.entity.Recruiter;
 import com.example.jobtracker.repository.ApplicationRepository;
+import com.example.jobtracker.repository.ApplicationStatusHistoryRepository;
 
 
 class ApplicationServiceTest {
@@ -29,6 +31,10 @@ class ApplicationServiceTest {
 
     @Mock
     private ApplicationRepository applicationRepository;
+
+
+    @Mock
+    private ApplicationStatusHistoryRepository applicationStatusHistoryRepository;
 
 
     private ApplicationService applicationService;
@@ -41,7 +47,10 @@ class ApplicationServiceTest {
         MockitoAnnotations.openMocks(this);
 
         applicationService =
-                new ApplicationService(applicationRepository);
+                new ApplicationService(
+                        applicationRepository,
+                        applicationStatusHistoryRepository
+                );
     }
 
 
@@ -436,6 +445,9 @@ class ApplicationServiceTest {
 
         verify(applicationRepository)
                 .save(any(Application.class));
+
+        verify(applicationStatusHistoryRepository)
+                .save(any(ApplicationStatusHistory.class));
     }
 
 
@@ -486,6 +498,46 @@ class ApplicationServiceTest {
 
         verify(applicationRepository)
                 .save(any(Application.class));
+
+        verify(applicationStatusHistoryRepository, never())
+                .save(any(ApplicationStatusHistory.class));
+    }
+
+
+
+    @Test
+    void shouldRecordStatusHistoryWhenApplicationStatusChangesOnUpdate() {
+
+
+        Application existingApplication =
+                createApplication(1L);
+
+
+        ApplicationDTO dto =
+                ApplicationDTO.builder()
+                        .userId(1L)
+                        .jobPostingId(3L)
+                        .statusId(99L)
+                        .cvId(4L)
+                        .coverLetterId(5L)
+                        .recruiterId(6L)
+                        .appliedDate(LocalDate.now())
+                        .notes("Moved to interview stage")
+                        .build();
+
+
+        when(applicationRepository.findById(1L))
+                .thenReturn(Optional.of(existingApplication));
+
+        when(applicationRepository.save(any(Application.class)))
+                .thenReturn(existingApplication);
+
+
+        applicationService.update(1L, dto);
+
+
+        verify(applicationStatusHistoryRepository)
+                .save(any(ApplicationStatusHistory.class));
     }
 
 
