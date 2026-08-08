@@ -27,7 +27,7 @@ public class Interview {
     private InterviewType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "result_id", nullable = false)
+    @JoinColumn(name = "result_id")
     private InterviewResult result;
 
     @Column(name = "scheduled_at", nullable = false)

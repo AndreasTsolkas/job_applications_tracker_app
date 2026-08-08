@@ -381,7 +381,7 @@ CREATE TABLE interview (
 
     type_id BIGINT NOT NULL,
 
-    result_id BIGINT NOT NULL,
+    result_id BIGINT,
 
     scheduled_at TIMESTAMP NOT NULL,
 

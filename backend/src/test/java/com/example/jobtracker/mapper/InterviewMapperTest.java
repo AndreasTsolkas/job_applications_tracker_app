@@ -165,6 +165,44 @@ class InterviewMapperTest {
 
 
     @Test
+    void shouldMapDTOToEntityWithoutResult() {
+
+
+        InterviewDTO dto =
+                InterviewDTO.builder()
+                        .id(1L)
+                        .applicationId(10L)
+                        .typeId(20L)
+                        .notes("Interview scheduled, awaiting outcome")
+                        .build();
+
+
+
+        Interview interview =
+                InterviewMapper.toEntity(dto);
+
+
+
+        assertNotNull(interview);
+
+
+        assertNotNull(
+                interview.getApplication()
+        );
+
+        assertNotNull(
+                interview.getType()
+        );
+
+
+        assertNull(
+                interview.getResult()
+        );
+    }
+
+
+
+    @Test
     void shouldHandleNullRelationsWhenMappingEntityToDTO() {
 
 

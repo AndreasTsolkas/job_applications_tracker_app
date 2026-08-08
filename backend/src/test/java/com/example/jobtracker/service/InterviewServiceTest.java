@@ -313,6 +313,52 @@ class InterviewServiceTest {
 
 
     @Test
+    void shouldSaveInterviewWithoutResult() {
+
+
+        InterviewDTO dto =
+                InterviewDTO.builder()
+                        .applicationId(10L)
+                        .typeId(2L)
+                        .scheduledAt(LocalDateTime.now())
+                        .notes("Interview scheduled, outcome pending")
+                        .build();
+
+
+
+        Interview savedInterview =
+                Interview.builder()
+                        .id(20L)
+                        .notes("Interview scheduled, outcome pending")
+                        .build();
+
+
+
+        when(interviewRepository.save(any(Interview.class)))
+                .thenReturn(savedInterview);
+
+
+
+        InterviewDTO result =
+                interviewService.save(dto);
+
+
+
+        assertNotNull(result);
+
+
+        assertNull(
+                result.getResultId()
+        );
+
+
+        verify(interviewRepository)
+                .save(any(Interview.class));
+    }
+
+
+
+    @Test
     void shouldUpdateInterview() {
 
 
