@@ -378,7 +378,7 @@ Implemented testing:
 
 * Mapper unit testing
 * Service unit testing
-* Controller unit testing foundation
+* Controller unit testing
 * JUnit 5 configuration
 * Mockito integration
 * MockMvc controller testing
@@ -392,6 +392,18 @@ Completed controller tests:
 * CompanyControllerTest
 * EmploymentTypeControllerTest
 * JobRoleControllerTest
+* JobPostingControllerTest
+* ApplicationStatusControllerTest
+* InterviewTypeControllerTest
+* InterviewResultControllerTest
+* RecruiterControllerTest
+* CVControllerTest
+* CoverLetterControllerTest
+* ApplicationControllerTest
+* ApplicationStatusHistoryControllerTest
+* InterviewControllerTest
+
+All controllers now have unit test coverage.
 
 Current controller tests verify:
 
@@ -407,7 +419,6 @@ Controllers are tested independently by mocking their service dependencies inste
 
 Future testing includes:
 
-* Remaining controller tests
 * Integration tests
 
 
@@ -477,7 +488,6 @@ seed_data.sql.txt
 
 Upcoming tasks:
 
-* Complete remaining controller unit tests
 * Improve service business logic
 * Add validation using Jakarta Validation
 * Add global exception handling
@@ -492,7 +502,6 @@ Upcoming tasks:
 
 Upcoming testing tasks:
 
-* Complete Controller unit testing
 * Start integration testing
 
 ## Frontend
