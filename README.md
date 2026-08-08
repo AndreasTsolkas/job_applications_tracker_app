@@ -488,7 +488,7 @@ seed_data.sql.txt
 
 Upcoming tasks:
 
-* Improve service business logic
+* Create service business logic
 * Add validation using Jakarta Validation
 * Add global exception handling
 * Improve API error responses
