@@ -56,6 +56,19 @@ public class InterviewService {
     }
 
 
+    public InterviewDTO update(Long id, InterviewDTO dto) {
+
+        Interview interview = interviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Interview not found"));
+
+        InterviewMapper.updateEntity(interview, dto);
+
+        Interview updatedInterview = interviewRepository.save(interview);
+
+        return InterviewMapper.toDTO(updatedInterview);
+    }
+
+
     public void delete(Long id) {
 
         interviewRepository.deleteById(id);

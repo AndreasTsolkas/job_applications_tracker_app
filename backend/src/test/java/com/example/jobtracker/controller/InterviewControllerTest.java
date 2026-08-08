@@ -1,12 +1,14 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -147,6 +149,40 @@ class InterviewControllerTest {
 
                 .andExpect(jsonPath("$.applicationId")
                         .value(1));
+    }
+
+    @Test
+    void shouldUpdateInterview() throws Exception {
+
+        InterviewDTO request = InterviewDTO.builder()
+                .applicationId(1L)
+                .typeId(1L)
+                .resultId(2L)
+                .notes("Rescheduled interview")
+                .build();
+
+        InterviewDTO response = InterviewDTO.builder()
+                .id(1L)
+                .applicationId(1L)
+                .typeId(1L)
+                .resultId(2L)
+                .notes("Rescheduled interview")
+                .build();
+
+        when(interviewService.update(eq(1L), any(InterviewDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/interviews/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.resultId")
+                        .value(2));
     }
 
     @Test

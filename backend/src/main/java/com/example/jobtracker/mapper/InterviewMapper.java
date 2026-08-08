@@ -76,4 +76,29 @@ public class InterviewMapper {
 
         return interview;
     }
+
+
+    public static void updateEntity(Interview interview, InterviewDTO dto) {
+
+        interview.setScheduledAt(dto.getScheduledAt());
+        interview.setNotes(dto.getNotes());
+
+        if (dto.getApplicationId() != null) {
+            Application application = new Application();
+            application.setId(dto.getApplicationId());
+            interview.setApplication(application);
+        }
+
+        if (dto.getTypeId() != null) {
+            InterviewType type = new InterviewType();
+            type.setId(dto.getTypeId());
+            interview.setType(type);
+        }
+
+        if (dto.getResultId() != null) {
+            InterviewResult result = new InterviewResult();
+            result.setId(dto.getResultId());
+            interview.setResult(result);
+        }
+    }
 }

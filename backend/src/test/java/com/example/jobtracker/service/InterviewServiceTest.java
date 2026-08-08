@@ -313,6 +313,81 @@ class InterviewServiceTest {
 
 
     @Test
+    void shouldUpdateInterview() {
+
+
+        Interview existingInterview =
+                createInterview(1L);
+
+
+        InterviewDTO dto =
+                InterviewDTO.builder()
+                        .applicationId(10L)
+                        .typeId(2L)
+                        .resultId(3L)
+                        .scheduledAt(LocalDateTime.now())
+                        .notes("Rescheduled interview")
+                        .build();
+
+
+        when(interviewRepository.findById(1L))
+                .thenReturn(Optional.of(existingInterview));
+
+        when(interviewRepository.save(any(Interview.class)))
+                .thenReturn(existingInterview);
+
+
+        InterviewDTO result =
+                interviewService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Rescheduled interview",
+                result.getNotes()
+        );
+
+
+        verify(interviewRepository)
+                .findById(1L);
+
+        verify(interviewRepository)
+                .save(any(Interview.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentInterview() {
+
+
+        InterviewDTO dto =
+                InterviewDTO.builder()
+                        .applicationId(10L)
+                        .typeId(2L)
+                        .resultId(3L)
+                        .build();
+
+
+        when(interviewRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> interviewService.update(99L, dto)
+        );
+
+
+        verify(interviewRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteInterview() {
 
 
