@@ -210,6 +210,78 @@ class InterviewTypeServiceTest {
 
 
     @Test
+    void shouldUpdateInterviewType() {
+
+
+        InterviewType existingType =
+                InterviewType.builder()
+                        .id(1L)
+                        .name("Technical")
+                        .build();
+
+
+        InterviewTypeDTO dto =
+                InterviewTypeDTO.builder()
+                        .name("Technical Screen")
+                        .build();
+
+
+        when(interviewTypeRepository.findById(1L))
+                .thenReturn(Optional.of(existingType));
+
+        when(interviewTypeRepository.save(any(InterviewType.class)))
+                .thenReturn(existingType);
+
+
+        InterviewTypeDTO result =
+                interviewTypeService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Technical Screen",
+                result.getName()
+        );
+
+
+        verify(interviewTypeRepository)
+                .findById(1L);
+
+        verify(interviewTypeRepository)
+                .save(any(InterviewType.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentInterviewType() {
+
+
+        InterviewTypeDTO dto =
+                InterviewTypeDTO.builder()
+                        .name("Final Interview")
+                        .build();
+
+
+        when(interviewTypeRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> interviewTypeService.update(99L, dto)
+        );
+
+
+        verify(interviewTypeRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteInterviewType() {
 
 

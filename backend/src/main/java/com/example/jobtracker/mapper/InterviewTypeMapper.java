@@ -32,4 +32,10 @@ public class InterviewTypeMapper {
                 .name(dto.getName())
                 .build();
     }
+
+
+    public static void updateEntity(InterviewType interviewType, InterviewTypeDTO dto) {
+
+        interviewType.setName(dto.getName());
+    }
 }

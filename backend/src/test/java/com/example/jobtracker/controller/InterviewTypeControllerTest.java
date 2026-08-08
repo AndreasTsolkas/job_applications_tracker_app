@@ -1,12 +1,14 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -112,6 +114,34 @@ class InterviewTypeControllerTest {
 
                 .andExpect(jsonPath("$.name")
                         .value("Onsite"));
+    }
+
+    @Test
+    void shouldUpdateInterviewType() throws Exception {
+
+        InterviewTypeDTO request = InterviewTypeDTO.builder()
+                .name("Technical Screen")
+                .build();
+
+        InterviewTypeDTO response = InterviewTypeDTO.builder()
+                .id(1L)
+                .name("Technical Screen")
+                .build();
+
+        when(interviewTypeService.update(eq(1L), any(InterviewTypeDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/interview-types/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.name")
+                        .value("Technical Screen"));
     }
 
     @Test
