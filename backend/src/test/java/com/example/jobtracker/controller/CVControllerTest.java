@@ -1,12 +1,14 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -147,6 +149,36 @@ class CVControllerTest {
 
                 .andExpect(jsonPath("$.name")
                         .value("New CV"));
+    }
+
+    @Test
+    void shouldUpdateCV() throws Exception {
+
+        CVDTO request = CVDTO.builder()
+                .name("John CV v2")
+                .isActive(true)
+                .build();
+
+        CVDTO response = CVDTO.builder()
+                .id(1L)
+                .name("John CV v2")
+                .isActive(true)
+                .build();
+
+        when(cvService.update(eq(1L), any(CVDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/cvs/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.name")
+                        .value("John CV v2"));
     }
 
     @Test

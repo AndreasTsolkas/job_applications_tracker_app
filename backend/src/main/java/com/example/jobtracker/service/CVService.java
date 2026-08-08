@@ -56,6 +56,19 @@ public class CVService {
     }
 
 
+    public CVDTO update(Long id, CVDTO dto) {
+
+        CV cv = cvRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("CV not found"));
+
+        CVMapper.updateEntity(cv, dto);
+
+        CV updatedCV = cvRepository.save(cv);
+
+        return CVMapper.toDTO(updatedCV);
+    }
+
+
     public void delete(Long id) {
 
         cvRepository.deleteById(id);

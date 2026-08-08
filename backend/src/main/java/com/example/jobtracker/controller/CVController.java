@@ -60,6 +60,17 @@ public class CVController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CVDTO> update(
+            @PathVariable Long id,
+            @RequestBody CVDTO dto) {
+
+        return ResponseEntity.ok(
+                cvService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

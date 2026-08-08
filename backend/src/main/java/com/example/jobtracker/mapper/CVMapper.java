@@ -4,6 +4,8 @@ import com.example.jobtracker.DTO.CVDTO;
 import com.example.jobtracker.entity.AppUser;
 import com.example.jobtracker.entity.CV;
 
+import java.time.LocalDateTime;
+
 public class CVMapper {
 
     private CVMapper() {
@@ -54,5 +56,21 @@ public class CVMapper {
         }
 
         return cv;
+    }
+
+
+    public static void updateEntity(CV cv, CVDTO dto) {
+
+        cv.setName(dto.getName());
+        cv.setFilePath(dto.getFilePath());
+        cv.setIsActive(dto.getIsActive());
+
+        if (dto.getUserId() != null) {
+            AppUser user = new AppUser();
+            user.setId(dto.getUserId());
+            cv.setUser(user);
+        }
+
+        cv.setUpdatedAt(LocalDateTime.now());
     }
 }

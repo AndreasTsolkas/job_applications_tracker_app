@@ -264,6 +264,78 @@ class CVServiceTest {
 
 
     @Test
+    void shouldUpdateCV() {
+
+
+        CV existingCV =
+                createCV(1L);
+
+
+        CVDTO dto =
+                CVDTO.builder()
+                        .name("John CV v2")
+                        .filePath("/files/john-cv-v2.pdf")
+                        .userId(1L)
+                        .isActive(true)
+                        .build();
+
+
+        when(cvRepository.findById(1L))
+                .thenReturn(Optional.of(existingCV));
+
+        when(cvRepository.save(any(CV.class)))
+                .thenReturn(existingCV);
+
+
+        CVDTO result =
+                cvService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "John CV v2",
+                result.getName()
+        );
+
+
+        verify(cvRepository)
+                .findById(1L);
+
+        verify(cvRepository)
+                .save(any(CV.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentCV() {
+
+
+        CVDTO dto =
+                CVDTO.builder()
+                        .name("New CV")
+                        .build();
+
+
+        when(cvRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> cvService.update(99L, dto)
+        );
+
+
+        verify(cvRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteCV() {
 
 
