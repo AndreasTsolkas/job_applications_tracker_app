@@ -64,4 +64,23 @@ public class ApplicationStatusHistoryMapper {
 
         return history;
     }
+
+
+    public static void updateEntity(ApplicationStatusHistory history, ApplicationStatusHistoryDTO dto) {
+
+        history.setNotes(dto.getNotes());
+        history.setChangedAt(dto.getChangedAt());
+
+        if (dto.getApplicationId() != null) {
+            Application application = new Application();
+            application.setId(dto.getApplicationId());
+            history.setApplication(application);
+        }
+
+        if (dto.getStatusId() != null) {
+            ApplicationStatus status = new ApplicationStatus();
+            status.setId(dto.getStatusId());
+            history.setStatus(status);
+        }
+    }
 }

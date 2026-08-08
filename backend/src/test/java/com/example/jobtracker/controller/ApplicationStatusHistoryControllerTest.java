@@ -1,12 +1,14 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -142,6 +144,38 @@ class ApplicationStatusHistoryControllerTest {
 
                 .andExpect(jsonPath("$.applicationId")
                         .value(1));
+    }
+
+    @Test
+    void shouldUpdateApplicationStatusHistory() throws Exception {
+
+        ApplicationStatusHistoryDTO request = ApplicationStatusHistoryDTO.builder()
+                .applicationId(1L)
+                .statusId(2L)
+                .notes("Moved to interview stage")
+                .build();
+
+        ApplicationStatusHistoryDTO response = ApplicationStatusHistoryDTO.builder()
+                .id(1L)
+                .applicationId(1L)
+                .statusId(2L)
+                .notes("Moved to interview stage")
+                .build();
+
+        when(applicationStatusHistoryService.update(eq(1L), any(ApplicationStatusHistoryDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/application-status-history/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.statusId")
+                        .value(2));
     }
 
     @Test

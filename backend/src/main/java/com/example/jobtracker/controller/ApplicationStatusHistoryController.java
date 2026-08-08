@@ -62,6 +62,17 @@ public class ApplicationStatusHistoryController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApplicationStatusHistoryDTO> update(
+            @PathVariable Long id,
+            @RequestBody ApplicationStatusHistoryDTO dto) {
+
+        return ResponseEntity.ok(
+                applicationStatusHistoryService.update(id, dto)
+        );
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {

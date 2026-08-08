@@ -291,6 +291,82 @@ class ApplicationStatusHistoryServiceTest {
 
 
     @Test
+    void shouldUpdateHistory() {
+
+
+        ApplicationStatusHistory existingHistory =
+                createHistory(1L);
+
+
+        LocalDateTime changedAt = LocalDateTime.now();
+
+
+        ApplicationStatusHistoryDTO dto =
+                ApplicationStatusHistoryDTO.builder()
+                        .applicationId(10L)
+                        .statusId(2L)
+                        .notes("Moved to interview stage")
+                        .changedAt(changedAt)
+                        .build();
+
+
+        when(applicationStatusHistoryRepository.findById(1L))
+                .thenReturn(Optional.of(existingHistory));
+
+        when(applicationStatusHistoryRepository.save(any(ApplicationStatusHistory.class)))
+                .thenReturn(existingHistory);
+
+
+        ApplicationStatusHistoryDTO result =
+                applicationStatusHistoryService.update(1L, dto);
+
+
+        assertNotNull(result);
+
+
+        assertEquals(
+                "Moved to interview stage",
+                result.getNotes()
+        );
+
+
+        verify(applicationStatusHistoryRepository)
+                .findById(1L);
+
+        verify(applicationStatusHistoryRepository)
+                .save(any(ApplicationStatusHistory.class));
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentHistory() {
+
+
+        ApplicationStatusHistoryDTO dto =
+                ApplicationStatusHistoryDTO.builder()
+                        .applicationId(10L)
+                        .statusId(2L)
+                        .build();
+
+
+        when(applicationStatusHistoryRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> applicationStatusHistoryService.update(99L, dto)
+        );
+
+
+        verify(applicationStatusHistoryRepository)
+                .findById(99L);
+    }
+
+
+
+    @Test
     void shouldDeleteHistory() {
 
 

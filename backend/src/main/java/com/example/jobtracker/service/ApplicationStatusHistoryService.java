@@ -63,6 +63,23 @@ public class ApplicationStatusHistoryService {
     }
 
 
+    public ApplicationStatusHistoryDTO update(Long id, ApplicationStatusHistoryDTO dto) {
+
+        ApplicationStatusHistory history =
+                applicationStatusHistoryRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Application status history not found"));
+
+        ApplicationStatusHistoryMapper.updateEntity(history, dto);
+
+        ApplicationStatusHistory updatedHistory =
+                applicationStatusHistoryRepository.save(history);
+
+        return ApplicationStatusHistoryMapper.toDTO(updatedHistory);
+    }
+
+
     public void delete(Long id) {
 
         applicationStatusHistoryRepository.deleteById(id);
