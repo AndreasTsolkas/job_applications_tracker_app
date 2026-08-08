@@ -76,6 +76,33 @@ class InterviewTypeMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+
+        InterviewType type = InterviewType.builder()
+                .id(1L)
+                .name("Technical Interview")
+                .build();
+
+
+        InterviewTypeDTO dto =
+                InterviewTypeDTO.builder()
+                        .name("Technical Screen")
+                        .build();
+
+
+        InterviewTypeMapper.updateEntity(type, dto);
+
+
+        assertEquals(
+                "Technical Screen",
+                type.getName()
+        );
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
 

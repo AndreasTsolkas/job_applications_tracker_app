@@ -2,6 +2,8 @@ package com.example.jobtracker.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import com.example.jobtracker.DTO.JobPostingDTO;
@@ -178,6 +180,85 @@ class JobPostingMapperTest {
         assertNull(dto.getJobRoleId());
 
         assertNull(dto.getEmploymentTypeId());
+    }
+
+
+
+    @Test
+    void shouldUpdateEntityFromDTO() {
+
+        JobPosting jobPosting = JobPosting.builder()
+                .id(1L)
+                .title("Old Title")
+                .description("Old description")
+                .location("Athens")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        LocalDateTime originalCreatedAt = jobPosting.getCreatedAt();
+
+        JobPostingDTO dto = JobPostingDTO.builder()
+                .title("New Title")
+                .description("New description")
+                .location("Remote")
+                .companyId(10L)
+                .jobRoleId(20L)
+                .employmentTypeId(30L)
+                .build();
+
+
+        JobPostingMapper.updateEntity(jobPosting, dto);
+
+
+        assertEquals(
+                "New Title",
+                jobPosting.getTitle()
+        );
+
+        assertEquals(
+                "New description",
+                jobPosting.getDescription()
+        );
+
+        assertEquals(
+                "Remote",
+                jobPosting.getLocation()
+        );
+
+        assertNotNull(
+                jobPosting.getCompany()
+        );
+
+        assertEquals(
+                10L,
+                jobPosting.getCompany().getId()
+        );
+
+        assertNotNull(
+                jobPosting.getJobRole()
+        );
+
+        assertEquals(
+                20L,
+                jobPosting.getJobRole().getId()
+        );
+
+        assertNotNull(
+                jobPosting.getEmploymentType()
+        );
+
+        assertEquals(
+                30L,
+                jobPosting.getEmploymentType().getId()
+        );
+
+        assertEquals(
+                originalCreatedAt,
+                jobPosting.getCreatedAt()
+        );
+
+        assertNotNull(jobPosting.getUpdatedAt());
     }
 
 

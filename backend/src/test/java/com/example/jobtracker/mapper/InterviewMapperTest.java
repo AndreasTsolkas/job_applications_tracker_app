@@ -202,6 +202,87 @@ class InterviewMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+
+        Interview interview = Interview.builder()
+                .id(1L)
+                .notes("Old notes")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+
+        LocalDateTime originalCreatedAt = interview.getCreatedAt();
+
+        LocalDateTime newScheduledAt = LocalDateTime.now();
+
+        InterviewDTO dto =
+                InterviewDTO.builder()
+                        .applicationId(10L)
+                        .typeId(20L)
+                        .resultId(30L)
+                        .scheduledAt(newScheduledAt)
+                        .notes("Updated notes")
+                        .build();
+
+
+        InterviewMapper.updateEntity(interview, dto);
+
+
+        assertEquals(
+                "Updated notes",
+                interview.getNotes()
+        );
+
+
+        assertEquals(
+                newScheduledAt,
+                interview.getScheduledAt()
+        );
+
+
+        assertNotNull(
+                interview.getApplication()
+        );
+
+
+        assertEquals(
+                10L,
+                interview.getApplication().getId()
+        );
+
+
+        assertNotNull(
+                interview.getType()
+        );
+
+
+        assertEquals(
+                20L,
+                interview.getType().getId()
+        );
+
+
+        assertNotNull(
+                interview.getResult()
+        );
+
+
+        assertEquals(
+                30L,
+                interview.getResult().getId()
+        );
+
+
+        assertEquals(
+                originalCreatedAt,
+                interview.getCreatedAt()
+        );
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
 

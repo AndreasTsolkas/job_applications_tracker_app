@@ -76,6 +76,33 @@ class InterviewResultMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+
+        InterviewResult result = InterviewResult.builder()
+                .id(1L)
+                .name("Passed")
+                .build();
+
+
+        InterviewResultDTO dto =
+                InterviewResultDTO.builder()
+                        .name("Passed - Moving Forward")
+                        .build();
+
+
+        InterviewResultMapper.updateEntity(result, dto);
+
+
+        assertEquals(
+                "Passed - Moving Forward",
+                result.getName()
+        );
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
 

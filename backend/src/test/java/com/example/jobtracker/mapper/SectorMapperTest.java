@@ -76,6 +76,48 @@ class SectorMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+        Sector sector = Sector.builder()
+                .id(1L)
+                .name("Old Name")
+                .description("Old description")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        LocalDateTime originalCreatedAt = sector.getCreatedAt();
+
+        SectorDTO dto = SectorDTO.builder()
+                .name("New Name")
+                .description("New description")
+                .build();
+
+
+        SectorMapper.updateEntity(sector, dto);
+
+
+        assertEquals(
+                "New Name",
+                sector.getName()
+        );
+
+        assertEquals(
+                "New description",
+                sector.getDescription()
+        );
+
+        assertEquals(
+                originalCreatedAt,
+                sector.getCreatedAt()
+        );
+
+        assertNotNull(sector.getUpdatedAt());
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
         SectorDTO dto = SectorMapper.toDTO(null);

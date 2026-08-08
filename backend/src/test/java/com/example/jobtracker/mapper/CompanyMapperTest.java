@@ -130,6 +130,65 @@ class CompanyMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+        Company company = Company.builder()
+                .id(1L)
+                .name("Old Co")
+                .website("https://old.com")
+                .location("USA")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        LocalDateTime originalCreatedAt = company.getCreatedAt();
+
+        CompanyDTO dto = CompanyDTO.builder()
+                .name("New Co")
+                .website("https://new.com")
+                .location("Canada")
+                .sectorId(20L)
+                .build();
+
+
+        CompanyMapper.updateEntity(company, dto);
+
+
+        assertEquals(
+                "New Co",
+                company.getName()
+        );
+
+        assertEquals(
+                "https://new.com",
+                company.getWebsite()
+        );
+
+        assertEquals(
+                "Canada",
+                company.getLocation()
+        );
+
+        assertNotNull(
+                company.getSector()
+        );
+
+        assertEquals(
+                20L,
+                company.getSector().getId()
+        );
+
+        assertEquals(
+                originalCreatedAt,
+                company.getCreatedAt()
+        );
+
+        assertNotNull(company.getUpdatedAt());
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
         CompanyDTO dto = CompanyMapper.toDTO(null);

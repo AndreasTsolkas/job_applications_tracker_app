@@ -134,6 +134,65 @@ class RecruiterMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+        Recruiter recruiter = Recruiter.builder()
+                .id(1L)
+                .firstName("Old")
+                .lastName("Name")
+                .email("old@test.com")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        LocalDateTime originalCreatedAt = recruiter.getCreatedAt();
+
+        RecruiterDTO dto = RecruiterDTO.builder()
+                .firstName("New")
+                .lastName("Recruiter")
+                .email("new@test.com")
+                .companyId(30L)
+                .build();
+
+
+        RecruiterMapper.updateEntity(recruiter, dto);
+
+
+        assertEquals(
+                "New",
+                recruiter.getFirstName()
+        );
+
+        assertEquals(
+                "Recruiter",
+                recruiter.getLastName()
+        );
+
+        assertEquals(
+                "new@test.com",
+                recruiter.getEmail()
+        );
+
+        assertNotNull(
+                recruiter.getCompany()
+        );
+
+        assertEquals(
+                30L,
+                recruiter.getCompany().getId()
+        );
+
+        assertEquals(
+                originalCreatedAt,
+                recruiter.getCreatedAt()
+        );
+
+        assertNotNull(recruiter.getUpdatedAt());
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
         RecruiterDTO dto = RecruiterMapper.toDTO(null);

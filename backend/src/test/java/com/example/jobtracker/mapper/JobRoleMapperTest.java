@@ -78,6 +78,47 @@ class JobRoleMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+        JobRole jobRole = JobRole.builder()
+                .id(1L)
+                .name("Old Role")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        LocalDateTime originalCreatedAt = jobRole.getCreatedAt();
+
+        JobRoleDTO dto = JobRoleDTO.builder()
+                .name("New Role")
+                .description("Updated description")
+                .build();
+
+
+        JobRoleMapper.updateEntity(jobRole, dto);
+
+
+        assertEquals(
+                "New Role",
+                jobRole.getName()
+        );
+
+        assertEquals(
+                "Updated description",
+                jobRole.getDescription()
+        );
+
+        assertEquals(
+                originalCreatedAt,
+                jobRole.getCreatedAt()
+        );
+
+        assertNotNull(jobRole.getUpdatedAt());
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
         JobRoleDTO dto = JobRoleMapper.toDTO(null);

@@ -68,6 +68,31 @@ class EmploymentTypeMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+        EmploymentType employmentType = EmploymentType.builder()
+                .id(1L)
+                .name("Full Time")
+                .build();
+
+
+        EmploymentTypeDTO dto = EmploymentTypeDTO.builder()
+                .name("Contract")
+                .build();
+
+
+        EmploymentTypeMapper.updateEntity(employmentType, dto);
+
+
+        assertEquals(
+                "Contract",
+                employmentType.getName()
+        );
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
         EmploymentTypeDTO dto =

@@ -73,6 +73,32 @@ class ApplicationStatusMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+        ApplicationStatus status = ApplicationStatus.builder()
+                .id(1L)
+                .name("Applied")
+                .build();
+
+
+        ApplicationStatusDTO dto =
+                ApplicationStatusDTO.builder()
+                        .name("Application Sent")
+                        .build();
+
+
+        ApplicationStatusMapper.updateEntity(status, dto);
+
+
+        assertEquals(
+                "Application Sent",
+                status.getName()
+        );
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
         ApplicationStatusDTO dto =

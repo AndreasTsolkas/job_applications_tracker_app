@@ -167,6 +167,69 @@ class ApplicationStatusHistoryMapperTest {
 
 
     @Test
+    void shouldUpdateEntityFromDTO() {
+
+
+        ApplicationStatusHistory history =
+                ApplicationStatusHistory.builder()
+                        .id(1L)
+                        .notes("Old notes")
+                        .changedAt(LocalDateTime.now().minusDays(1))
+                        .build();
+
+
+        LocalDateTime newChangedAt = LocalDateTime.now();
+
+
+        ApplicationStatusHistoryDTO dto =
+                ApplicationStatusHistoryDTO.builder()
+                        .applicationId(10L)
+                        .statusId(20L)
+                        .notes("Updated notes")
+                        .changedAt(newChangedAt)
+                        .build();
+
+
+        ApplicationStatusHistoryMapper.updateEntity(history, dto);
+
+
+        assertEquals(
+                "Updated notes",
+                history.getNotes()
+        );
+
+
+        assertEquals(
+                newChangedAt,
+                history.getChangedAt()
+        );
+
+
+        assertNotNull(
+                history.getApplication()
+        );
+
+
+        assertEquals(
+                10L,
+                history.getApplication().getId()
+        );
+
+
+        assertNotNull(
+                history.getStatus()
+        );
+
+
+        assertEquals(
+                20L,
+                history.getStatus().getId()
+        );
+    }
+
+
+
+    @Test
     void shouldReturnNullWhenEntityIsNull() {
 
 

@@ -3,6 +3,7 @@ package com.example.jobtracker.mapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -239,6 +240,101 @@ class ApplicationMapperTest {
         assertNull(dto.getCoverLetterId());
 
         assertNull(dto.getRecruiterId());
+    }
+
+
+
+    @Test
+    void shouldUpdateEntityFromDTO() {
+
+
+        Application application = Application.builder()
+                .id(10L)
+                .notes("Old notes")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+
+        LocalDateTime originalCreatedAt = application.getCreatedAt();
+
+
+        ApplicationDTO dto = ApplicationDTO.builder()
+                .userId(1L)
+                .jobPostingId(2L)
+                .statusId(3L)
+                .cvId(4L)
+                .coverLetterId(5L)
+                .recruiterId(6L)
+                .appliedDate(LocalDate.now())
+                .notes("Updated notes")
+                .build();
+
+
+        ApplicationMapper.updateEntity(application, dto);
+
+
+        assertEquals(
+                "Updated notes",
+                application.getNotes()
+        );
+
+
+        assertNotNull(application.getUser());
+
+        assertEquals(
+                1L,
+                application.getUser().getId()
+        );
+
+
+        assertNotNull(application.getJobPosting());
+
+        assertEquals(
+                2L,
+                application.getJobPosting().getId()
+        );
+
+
+        assertNotNull(application.getStatus());
+
+        assertEquals(
+                3L,
+                application.getStatus().getId()
+        );
+
+
+        assertNotNull(application.getCv());
+
+        assertEquals(
+                4L,
+                application.getCv().getId()
+        );
+
+
+        assertNotNull(application.getCoverLetter());
+
+        assertEquals(
+                5L,
+                application.getCoverLetter().getId()
+        );
+
+
+        assertNotNull(application.getRecruiter());
+
+        assertEquals(
+                6L,
+                application.getRecruiter().getId()
+        );
+
+
+        assertEquals(
+                originalCreatedAt,
+                application.getCreatedAt()
+        );
+
+
+        assertNotNull(application.getUpdatedAt());
     }
 
 

@@ -2,6 +2,8 @@ package com.example.jobtracker.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import com.example.jobtracker.DTO.CoverLetterDTO;
@@ -132,6 +134,65 @@ class CoverLetterMapperTest {
         assertNull(
                 dto.getUserId()
         );
+    }
+
+
+
+    @Test
+    void shouldUpdateEntityFromDTO() {
+
+        CoverLetter coverLetter = CoverLetter.builder()
+                .id(1L)
+                .name("Old Letter")
+                .content("Old content")
+                .filePath("/files/old.pdf")
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        LocalDateTime originalCreatedAt = coverLetter.getCreatedAt();
+
+        CoverLetterDTO dto = CoverLetterDTO.builder()
+                .name("New Letter")
+                .content("New content")
+                .filePath("/files/new.pdf")
+                .userId(20L)
+                .build();
+
+
+        CoverLetterMapper.updateEntity(coverLetter, dto);
+
+
+        assertEquals(
+                "New Letter",
+                coverLetter.getName()
+        );
+
+        assertEquals(
+                "New content",
+                coverLetter.getContent()
+        );
+
+        assertEquals(
+                "/files/new.pdf",
+                coverLetter.getFilePath()
+        );
+
+        assertNotNull(
+                coverLetter.getUser()
+        );
+
+        assertEquals(
+                20L,
+                coverLetter.getUser().getId()
+        );
+
+        assertEquals(
+                originalCreatedAt,
+                coverLetter.getCreatedAt()
+        );
+
+        assertNotNull(coverLetter.getUpdatedAt());
     }
 
 
