@@ -52,6 +52,8 @@ public class CVService {
 
         CV savedCV = cvRepository.save(cv);
 
+        deactivateOtherActiveCVs(savedCV);
+
         return CVMapper.toDTO(savedCV);
     }
 
@@ -65,6 +67,8 @@ public class CVService {
 
         CV updatedCV = cvRepository.save(cv);
 
+        deactivateOtherActiveCVs(updatedCV);
+
         return CVMapper.toDTO(updatedCV);
     }
 
@@ -72,5 +76,27 @@ public class CVService {
     public void delete(Long id) {
 
         cvRepository.deleteById(id);
+    }
+
+
+    private void deactivateOtherActiveCVs(CV cv) {
+
+        if (!Boolean.TRUE.equals(cv.getIsActive()) || cv.getUser() == null) {
+            return;
+        }
+
+        List<CV> userCVs = cvRepository.findByUserId(cv.getUser().getId());
+
+        for (CV other : userCVs) {
+
+            if (other.getId().equals(cv.getId())) {
+                continue;
+            }
+
+            if (Boolean.TRUE.equals(other.getIsActive())) {
+                other.setIsActive(false);
+                cvRepository.save(other);
+            }
+        }
     }
 }

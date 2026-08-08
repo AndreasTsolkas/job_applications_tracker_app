@@ -264,6 +264,92 @@ class CVServiceTest {
 
 
     @Test
+    void shouldDeactivateOtherActiveCVsWhenSavingNewActiveCV() {
+
+
+        AppUser user = AppUser.builder()
+                .id(1L)
+                .build();
+
+
+        CVDTO dto =
+                CVDTO.builder()
+                        .name("New Active CV")
+                        .filePath("/files/new-cv.pdf")
+                        .userId(1L)
+                        .isActive(true)
+                        .build();
+
+
+        CV savedCV = CV.builder()
+                .id(10L)
+                .name("New Active CV")
+                .user(user)
+                .isActive(true)
+                .build();
+
+
+        CV otherActiveCV = CV.builder()
+                .id(2L)
+                .name("Old CV")
+                .user(user)
+                .isActive(true)
+                .build();
+
+
+        when(cvRepository.save(any(CV.class)))
+                .thenReturn(savedCV);
+
+        when(cvRepository.findByUserId(1L))
+                .thenReturn(List.of(savedCV, otherActiveCV));
+
+
+        cvService.save(dto);
+
+
+        assertFalse(
+                otherActiveCV.getIsActive()
+        );
+
+        verify(cvRepository)
+                .save(otherActiveCV);
+    }
+
+
+
+    @Test
+    void shouldNotDeactivateOtherCVsWhenSavedCVIsInactive() {
+
+
+        CVDTO dto =
+                CVDTO.builder()
+                        .name("Inactive CV")
+                        .userId(1L)
+                        .isActive(false)
+                        .build();
+
+
+        CV savedCV = CV.builder()
+                .id(10L)
+                .name("Inactive CV")
+                .isActive(false)
+                .build();
+
+
+        when(cvRepository.save(any(CV.class)))
+                .thenReturn(savedCV);
+
+
+        cvService.save(dto);
+
+
+        verify(cvRepository, never())
+                .findByUserId(anyLong());
+    }
+
+
+
+    @Test
     void shouldUpdateCV() {
 
 
@@ -305,6 +391,62 @@ class CVServiceTest {
 
         verify(cvRepository)
                 .save(any(CV.class));
+    }
+
+
+
+    @Test
+    void shouldDeactivateOtherActiveCVsWhenUpdatingCVToActive() {
+
+
+        AppUser user = AppUser.builder()
+                .id(1L)
+                .build();
+
+
+        CV existingCV = CV.builder()
+                .id(1L)
+                .name("John CV")
+                .user(user)
+                .isActive(false)
+                .build();
+
+
+        CVDTO dto =
+                CVDTO.builder()
+                        .name("John CV")
+                        .userId(1L)
+                        .isActive(true)
+                        .build();
+
+
+        CV otherActiveCV = CV.builder()
+                .id(2L)
+                .name("Other CV")
+                .user(user)
+                .isActive(true)
+                .build();
+
+
+        when(cvRepository.findById(1L))
+                .thenReturn(Optional.of(existingCV));
+
+        when(cvRepository.save(any(CV.class)))
+                .thenReturn(existingCV);
+
+        when(cvRepository.findByUserId(1L))
+                .thenReturn(List.of(existingCV, otherActiveCV));
+
+
+        cvService.update(1L, dto);
+
+
+        assertFalse(
+                otherActiveCV.getIsActive()
+        );
+
+        verify(cvRepository)
+                .save(otherActiveCV);
     }
 
 
