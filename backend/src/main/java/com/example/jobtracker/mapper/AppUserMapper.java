@@ -3,6 +3,8 @@ package com.example.jobtracker.mapper;
 import com.example.jobtracker.DTO.AppUserDTO;
 import com.example.jobtracker.entity.AppUser;
 
+import java.time.LocalDateTime;
+
 public class AppUserMapper {
 
     private AppUserMapper() {
@@ -44,5 +46,16 @@ public class AppUserMapper {
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .build();
+    }
+
+
+    public static void updateEntity(AppUser user, AppUserDTO dto) {
+
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setUserRole(dto.getUserRole());
+        user.setEnabled(dto.getEnabled());
+        user.setUpdatedAt(LocalDateTime.now());
     }
 }
