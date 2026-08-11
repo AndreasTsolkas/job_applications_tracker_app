@@ -1,7 +1,14 @@
 package com.example.jobtracker.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -9,11 +16,14 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import com.example.jobtracker.DTO.AppUserDTO;
 import com.example.jobtracker.service.AppUserService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(AppUserController.class)
 class AppUserControllerTest {
@@ -23,6 +33,8 @@ class AppUserControllerTest {
 
     @MockitoBean
     private AppUserService appUserService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void shouldReturnAllUsers() throws Exception {
@@ -57,4 +69,82 @@ class AppUserControllerTest {
                 .andExpect(jsonPath("$[1].lastName").value("Doe"))
                 .andExpect(jsonPath("$[1].email").value("jane@test.com"));
     }
+
+
+
+    @Test
+    void shouldReturnUserById() throws Exception {
+
+        AppUserDTO user = AppUserDTO.builder()
+                .id(1L)
+                .firstName("John")
+                .lastName("Smith")
+                .email("john@test.com")
+                .build();
+
+        when(appUserService.getById(1L))
+                .thenReturn(user);
+
+        mockMvc.perform(get("/api/users/1"))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.email")
+                        .value("john@test.com"));
+    }
+
+
+
+    @Test
+    void shouldUpdateUser() throws Exception {
+
+        AppUserDTO request = AppUserDTO.builder()
+                .firstName("Jonathan")
+                .lastName("Smith")
+                .email("jonathan@test.com")
+                .userRole("USER")
+                .enabled(true)
+                .build();
+
+        AppUserDTO response = AppUserDTO.builder()
+                .id(1L)
+                .firstName("Jonathan")
+                .lastName("Smith")
+                .email("jonathan@test.com")
+                .userRole("USER")
+                .enabled(true)
+                .build();
+
+        when(appUserService.update(eq(1L), any(AppUserDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath("$.id")
+                        .value(1))
+
+                .andExpect(jsonPath("$.firstName")
+                        .value("Jonathan"));
+    }
+
+
+
+    @Test
+    void shouldDeleteUser() throws Exception {
+
+        mockMvc.perform(delete("/api/users/1"))
+
+                .andExpect(status().isNoContent());
+
+        verify(appUserService)
+                .delete(1L);
+    }
+
 }

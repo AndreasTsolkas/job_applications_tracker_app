@@ -1,5 +1,6 @@
 package com.example.jobtracker.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.jobtracker.DTO.AppUserDTO;
@@ -20,8 +21,41 @@ public class AppUserController {
 
 
     @GetMapping
-    public List<AppUserDTO> getAllUsers() {
+    public ResponseEntity<List<AppUserDTO>> getAllUsers() {
 
-        return appUserService.getAllUsers();
+        return ResponseEntity.ok(
+                appUserService.getAllUsers()
+        );
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AppUserDTO> getById(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                appUserService.getById(id)
+        );
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AppUserDTO> update(
+            @PathVariable Long id,
+            @RequestBody AppUserDTO dto) {
+
+        return ResponseEntity.ok(
+                appUserService.update(id, dto)
+        );
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id) {
+
+        appUserService.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
