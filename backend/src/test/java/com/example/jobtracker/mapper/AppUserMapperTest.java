@@ -2,6 +2,8 @@ package com.example.jobtracker.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import com.example.jobtracker.DTO.AppUserDTO;
@@ -156,6 +158,97 @@ class AppUserMapperTest {
         assertEquals(
                 "test@test.com",
                 dto.getEmail()
+        );
+    }
+
+
+
+    @Test
+    void shouldUpdateEntityFromDTO() {
+
+
+        AppUser user = AppUser.builder()
+                .id(1L)
+                .firstName("Old")
+                .lastName("Name")
+                .email("old@test.com")
+                .passwordHash("secret_hash")
+                .userRole("USER")
+                .enabled(true)
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .updatedAt(LocalDateTime.now().minusDays(1))
+                .build();
+
+        LocalDateTime originalCreatedAt = user.getCreatedAt();
+
+
+        AppUserDTO dto = AppUserDTO.builder()
+                .firstName("New")
+                .lastName("User")
+                .email("new@test.com")
+                .build();
+
+
+        AppUserMapper.updateEntity(user, dto);
+
+
+        assertEquals(
+                "New",
+                user.getFirstName()
+        );
+
+        assertEquals(
+                "User",
+                user.getLastName()
+        );
+
+        assertEquals(
+                "new@test.com",
+                user.getEmail()
+        );
+
+        assertEquals(
+                "secret_hash",
+                user.getPasswordHash()
+        );
+
+        assertEquals(
+                originalCreatedAt,
+                user.getCreatedAt()
+        );
+
+        assertNotNull(user.getUpdatedAt());
+    }
+
+
+
+    @Test
+    void shouldNotChangeUserRoleOrEnabledFlagOnUpdate() {
+
+
+        AppUser user = AppUser.builder()
+                .id(1L)
+                .userRole("USER")
+                .enabled(true)
+                .build();
+
+
+        AppUserDTO dto = AppUserDTO.builder()
+                .userRole("ADMIN")
+                .enabled(false)
+                .build();
+
+
+        AppUserMapper.updateEntity(user, dto);
+
+
+        assertEquals(
+                "USER",
+                user.getUserRole()
+        );
+
+        assertTrue(
+                user.getEnabled()
         );
     }
 

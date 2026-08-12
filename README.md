@@ -15,6 +15,7 @@ The project is currently under active development.
 * Account
   * User registration / profile
   * Authentication & login
+  * Implemented via JWT: register creates the account, login returns a signed token — but existing resource endpoints (applications, companies, etc.) don't require it yet (see roadmap)
 * Reference data
   * Manage sectors (industries)
   * Manage companies
@@ -305,6 +306,7 @@ The following backend components have been implemented:
 * Service layer
 * REST Controller layer
 * Initial REST API endpoints
+* JWT-based authentication (register/login)
 
 ---
 
@@ -349,6 +351,12 @@ DTO classes have been created for:
 * InterviewType
 * InterviewResult
 * Interview
+
+Auth-specific DTOs:
+
+* RegisterRequestDTO
+* LoginRequestDTO
+* LoginResponseDTO
 
 ---
 
@@ -410,6 +418,7 @@ Current service responsibilities:
 REST controllers have been created for:
 
 * AppUserController
+* AuthController
 * SectorController
 * CompanyController
 * RecruiterController
@@ -493,6 +502,7 @@ Implemented testing:
 * Mapper unit testing
 * Service unit testing
 * Controller unit testing
+* JWT service unit testing
 * JUnit 5 configuration
 * Mockito integration
 * MockMvc controller testing
@@ -502,6 +512,7 @@ Implemented testing:
 Completed controller tests:
 
 * AppUserControllerTest
+* AuthControllerTest
 * SectorControllerTest
 * CompanyControllerTest
 * EmploymentTypeControllerTest
@@ -606,7 +617,7 @@ Upcoming tasks:
 * Add validation using Jakarta Validation
 * Add global exception handling
 * Improve API error responses
-* Implement authentication and authorization
+* Secure existing endpoints with JWT-based authorization (currently only register/login exist; other endpoints remain open)
 * Add advanced application workflow handling
 * Implement dashboard and statistics features
 * Add search and filtering capabilities
