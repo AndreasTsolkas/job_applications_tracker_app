@@ -377,6 +377,31 @@ class AppUserServiceTest {
 
 
     @Test
+    void shouldThrowExceptionWhenRegisteringWithNullPassword() {
+
+
+        RegisterRequestDTO dto = RegisterRequestDTO.builder()
+                .email("john@test.com")
+                .password(null)
+                .build();
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> appUserService.register(dto)
+        );
+
+
+        verify(appUserRepository, never())
+                .findByEmail(any());
+
+        verify(appUserRepository, never())
+                .save(any(AppUser.class));
+    }
+
+
+
+    @Test
     void shouldLoginWithValidCredentials() {
 
 
@@ -468,6 +493,31 @@ class AppUserServiceTest {
                 () -> appUserService.login(dto)
         );
 
+
+        verify(jwtService, never())
+                .generateToken(any(), any(), any());
+    }
+
+
+
+    @Test
+    void shouldThrowExceptionWhenLoginPasswordIsNull() {
+
+
+        LoginRequestDTO dto = LoginRequestDTO.builder()
+                .email("john@test.com")
+                .password(null)
+                .build();
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> appUserService.login(dto)
+        );
+
+
+        verify(appUserRepository, never())
+                .findByEmail(any());
 
         verify(jwtService, never())
                 .generateToken(any(), any(), any());
