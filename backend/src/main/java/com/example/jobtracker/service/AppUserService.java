@@ -72,6 +72,10 @@ public class AppUserService {
 
     public AppUserDTO register(RegisterRequestDTO dto) {
 
+        if (dto.getPassword() == null || dto.getPassword().isBlank()) {
+            throw new RuntimeException("Password is required");
+        }
+
         if (appUserRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
@@ -96,6 +100,10 @@ public class AppUserService {
 
 
     public LoginResponseDTO login(LoginRequestDTO dto) {
+
+        if (dto.getPassword() == null || dto.getPassword().isBlank()) {
+            throw new RuntimeException("Invalid email or password");
+        }
 
         AppUser user = appUserRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
