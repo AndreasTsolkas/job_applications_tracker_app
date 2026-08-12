@@ -186,8 +186,6 @@ class AppUserMapperTest {
                 .firstName("New")
                 .lastName("User")
                 .email("new@test.com")
-                .userRole("ADMIN")
-                .enabled(false)
                 .build();
 
 
@@ -210,15 +208,6 @@ class AppUserMapperTest {
         );
 
         assertEquals(
-                "ADMIN",
-                user.getUserRole()
-        );
-
-        assertFalse(
-                user.getEnabled()
-        );
-
-        assertEquals(
                 "secret_hash",
                 user.getPasswordHash()
         );
@@ -229,6 +218,38 @@ class AppUserMapperTest {
         );
 
         assertNotNull(user.getUpdatedAt());
+    }
+
+
+
+    @Test
+    void shouldNotChangeUserRoleOrEnabledFlagOnUpdate() {
+
+
+        AppUser user = AppUser.builder()
+                .id(1L)
+                .userRole("USER")
+                .enabled(true)
+                .build();
+
+
+        AppUserDTO dto = AppUserDTO.builder()
+                .userRole("ADMIN")
+                .enabled(false)
+                .build();
+
+
+        AppUserMapper.updateEntity(user, dto);
+
+
+        assertEquals(
+                "USER",
+                user.getUserRole()
+        );
+
+        assertTrue(
+                user.getEnabled()
+        );
     }
 
 
