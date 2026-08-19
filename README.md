@@ -162,12 +162,13 @@ job_applications_tracker_app
 │   │   │   ├── java
 │   │   │   │   └── com.example.jobtracker
 │   │   │   │       │
-│   │   │   │       ├── entity
+│   │   │   │       ├── controller
 │   │   │   │       ├── DTO
+│   │   │   │       ├── entity
 │   │   │   │       ├── mapper
 │   │   │   │       ├── repository
-│   │   │   │       ├── service
-│   │   │   │       └── controller
+│   │   │   │       ├── security
+│   │   │   │       └── service
 │   │   │   │
 │   │   │   └── resources
 │   │   │       ├── application.properties
@@ -177,9 +178,10 @@ job_applications_tracker_app
 │   │       └── java
 │   │           └── com.example.jobtracker
 │   │               │
+│   │               ├── controller
 │   │               ├── mapper
-│   │               ├── service
-│   │               └── controller
+│   │               ├── security
+│   │               └── service
 │   │
 │   ├── compose.yaml
 │   ├── pom.xml
@@ -365,6 +367,7 @@ Auth-specific DTOs:
 
 The mapper layer currently contains:
 
+* AppUserMapper
 * SectorMapper
 * CompanyMapper
 * RecruiterMapper
@@ -615,7 +618,8 @@ seed_data.sql.txt
 
 Upcoming tasks:
 
-* Create service business logic
+* Add Swagger
+* Create core business logic
 * Add validation using Jakarta Validation
 * Add global exception handling
 * Improve API error responses
