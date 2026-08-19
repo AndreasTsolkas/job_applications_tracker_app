@@ -169,4 +169,34 @@ class JwtAuthenticationFilterTest {
         verify(filterChain)
                 .doFilter(request, response);
     }
+
+
+
+    @Test
+    void shouldNotAuthenticateWhenUserRoleClaimIsMissing() throws Exception {
+
+
+        when(request.getHeader("Authorization"))
+                .thenReturn("Bearer valid-token");
+
+        when(jwtService.parseToken("valid-token"))
+                .thenReturn(claims);
+
+        when(claims.getSubject())
+                .thenReturn("1");
+
+        when(claims.get("userRole", String.class))
+                .thenReturn(null);
+
+
+        filter.doFilter(request, response, filterChain);
+
+
+        assertNull(
+                SecurityContextHolder.getContext().getAuthentication()
+        );
+
+        verify(filterChain)
+                .doFilter(request, response);
+    }
 }

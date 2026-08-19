@@ -48,6 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String userId = claims.getSubject();
                 String userRole = claims.get("userRole", String.class);
 
+                if (userId == null || userRole == null || userRole.isBlank()) {
+                    throw new JwtException("Token is missing required claims");
+                }
+
                 List<GrantedAuthority> authorities =
                         List.of(new SimpleGrantedAuthority("ROLE_" + userRole));
 
