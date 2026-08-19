@@ -15,7 +15,7 @@ The project is currently under active development.
 * Account
   * User registration / profile
   * Authentication & login
-  * Implemented via JWT: register creates the account, login returns a signed token — but existing resource endpoints (applications, companies, etc.) don't require it yet (see roadmap)
+  * Implemented via JWT: register creates the account, login returns a signed token, and every other endpoint (applications, companies, etc.) now requires a valid `Authorization: Bearer` token — only `/api/auth/register` and `/api/auth/login` remain open
 * Reference data
   * Manage sectors (industries)
   * Manage companies
@@ -162,12 +162,13 @@ job_applications_tracker_app
 │   │   │   ├── java
 │   │   │   │   └── com.example.jobtracker
 │   │   │   │       │
-│   │   │   │       ├── entity
+│   │   │   │       ├── controller
 │   │   │   │       ├── DTO
+│   │   │   │       ├── entity
 │   │   │   │       ├── mapper
 │   │   │   │       ├── repository
-│   │   │   │       ├── service
-│   │   │   │       └── controller
+│   │   │   │       ├── security
+│   │   │   │       └── service
 │   │   │   │
 │   │   │   └── resources
 │   │   │       ├── application.properties
@@ -177,9 +178,10 @@ job_applications_tracker_app
 │   │       └── java
 │   │           └── com.example.jobtracker
 │   │               │
+│   │               ├── controller
 │   │               ├── mapper
-│   │               ├── service
-│   │               └── controller
+│   │               ├── security
+│   │               └── service
 │   │
 │   ├── compose.yaml
 │   ├── pom.xml
@@ -307,6 +309,7 @@ The following backend components have been implemented:
 * REST Controller layer
 * Initial REST API endpoints
 * JWT-based authentication (register/login)
+* JWT-based authorization enforced on all endpoints except register/login
 
 ---
 
@@ -364,6 +367,7 @@ Auth-specific DTOs:
 
 The mapper layer currently contains:
 
+* AppUserMapper
 * SectorMapper
 * CompanyMapper
 * RecruiterMapper
@@ -503,6 +507,7 @@ Implemented testing:
 * Service unit testing
 * Controller unit testing
 * JWT service unit testing
+* JWT authentication filter unit testing
 * JUnit 5 configuration
 * Mockito integration
 * MockMvc controller testing
@@ -613,11 +618,11 @@ seed_data.sql.txt
 
 Upcoming tasks:
 
-* Create service business logic
+* Add Swagger
+* Create core business logic
 * Add validation using Jakarta Validation
 * Add global exception handling
 * Improve API error responses
-* Secure existing endpoints with JWT-based authorization (currently only register/login exist; other endpoints remain open)
 * Add advanced application workflow handling
 * Implement dashboard and statistics features
 * Add search and filtering capabilities
