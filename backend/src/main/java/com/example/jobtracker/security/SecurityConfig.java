@@ -15,10 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Configuration
 public class SecurityConfig {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,10 +66,13 @@ public class SecurityConfig {
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(String.format(
-                "{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"%s\",\"path\":\"%s\"}",
-                "Authentication required",
-                request.getRequestURI()
-        ));
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+        body.put("error", "Unauthorized");
+        body.put("message", "Authentication required");
+        body.put("path", request.getRequestURI());
+
+        response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 }
