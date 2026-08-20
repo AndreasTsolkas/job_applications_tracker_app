@@ -618,7 +618,6 @@ seed_data.sql.txt
 
 Upcoming tasks:
 
-* Add Swagger
 * Create core business logic
 * Add validation using Jakarta Validation
 * Add global exception handling
