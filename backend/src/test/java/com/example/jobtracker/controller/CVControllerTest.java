@@ -2,6 +2,7 @@ package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -152,9 +153,29 @@ class CVControllerTest {
     }
 
     @Test
+    void shouldRejectCreateCVWithoutIsActive() throws Exception {
+
+        CVDTO request = CVDTO.builder()
+                .userId(1L)
+                .name("New CV")
+                .build();
+
+        mockMvc.perform(post("/api/cvs")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isBadRequest());
+
+        verify(cvService, never())
+                .save(any(CVDTO.class));
+    }
+
+
+    @Test
     void shouldUpdateCV() throws Exception {
 
         CVDTO request = CVDTO.builder()
+                .userId(1L)
                 .name("John CV v2")
                 .isActive(true)
                 .build();

@@ -150,6 +150,7 @@ class CoverLetterControllerTest {
     void shouldUpdateCoverLetter() throws Exception {
 
         CoverLetterDTO request = CoverLetterDTO.builder()
+                .userId(1L)
                 .name("Backend Developer Letter v2")
                 .build();
 

@@ -1,5 +1,6 @@
 package com.example.jobtracker.controller;
 
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
@@ -110,6 +111,24 @@ class SectorControllerTest {
                 .andExpect(jsonPath("$.name")
                         .value("Healthcare"));
     }
+
+    @Test
+    void shouldRejectCreateSectorWithBlankName() throws Exception {
+
+        SectorDTO request = SectorDTO.builder()
+                .name("")
+                .build();
+
+        mockMvc.perform(post("/api/sectors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isBadRequest());
+
+        verify(sectorService, never())
+                .save(any(SectorDTO.class));
+    }
+
 
     @Test
     void shouldUpdateSector() throws Exception {

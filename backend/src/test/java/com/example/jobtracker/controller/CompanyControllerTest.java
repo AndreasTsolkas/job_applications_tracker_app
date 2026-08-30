@@ -3,6 +3,7 @@ package com.example.jobtracker.controller;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -112,6 +113,7 @@ class CompanyControllerTest {
 
         CompanyDTO request = CompanyDTO.builder()
                 .name("Tesla")
+                .sectorId(1L)
                 .build();
 
         CompanyDTO response = CompanyDTO.builder()
@@ -138,10 +140,31 @@ class CompanyControllerTest {
     }
 
     @Test
+    void shouldRejectCreateCompanyWithoutSector() throws Exception {
+
+        CompanyDTO request = CompanyDTO.builder()
+                .name("Tesla")
+                .build();
+
+        mockMvc.perform(post("/api/companies")
+
+                .contentType(MediaType.APPLICATION_JSON)
+
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isBadRequest());
+
+        verify(companyService, never())
+                .save(any(CompanyDTO.class));
+    }
+
+
+    @Test
     void shouldUpdateCompany() throws Exception {
 
         CompanyDTO request = CompanyDTO.builder()
                 .name("Alphabet")
+                .sectorId(1L)
                 .build();
 
         CompanyDTO response = CompanyDTO.builder()

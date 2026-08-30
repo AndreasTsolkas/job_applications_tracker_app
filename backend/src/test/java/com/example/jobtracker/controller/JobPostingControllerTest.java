@@ -141,6 +141,9 @@ class JobPostingControllerTest {
 
         JobPostingDTO request = JobPostingDTO.builder()
                 .title("Full Stack Developer")
+                .companyId(1L)
+                .jobRoleId(1L)
+                .employmentTypeId(1L)
                 .build();
 
         JobPostingDTO response = JobPostingDTO.builder()
@@ -171,6 +174,9 @@ class JobPostingControllerTest {
 
         JobPostingDTO request = JobPostingDTO.builder()
                 .title("Senior Java Developer")
+                .companyId(1L)
+                .jobRoleId(1L)
+                .employmentTypeId(1L)
                 .build();
 
         JobPostingDTO response = JobPostingDTO.builder()

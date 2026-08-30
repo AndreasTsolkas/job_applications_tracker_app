@@ -1,6 +1,8 @@
 package com.example.jobtracker.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -71,6 +73,48 @@ class AuthControllerTest {
                         .value("john@test.com"));
     }
 
+
+
+    @Test
+    void shouldRejectRegisterWithInvalidEmail() throws Exception {
+
+        RegisterRequestDTO request = RegisterRequestDTO.builder()
+                .firstName("John")
+                .lastName("Smith")
+                .email("not-an-email")
+                .password("plain_password")
+                .build();
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isBadRequest());
+
+        verify(appUserService, never())
+                .register(any(RegisterRequestDTO.class));
+    }
+
+
+    @Test
+    void shouldRejectRegisterWithBlankPassword() throws Exception {
+
+        RegisterRequestDTO request = RegisterRequestDTO.builder()
+                .firstName("John")
+                .lastName("Smith")
+                .email("john@test.com")
+                .password("")
+                .build();
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+
+                .andExpect(status().isBadRequest());
+
+        verify(appUserService, never())
+                .register(any(RegisterRequestDTO.class));
+    }
 
 
     @Test

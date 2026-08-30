@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ import com.example.jobtracker.DTO.InterviewDTO;
 import com.example.jobtracker.service.InterviewService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @WebMvcTest(InterviewController.class)
 class InterviewControllerTest {
@@ -39,7 +41,8 @@ class InterviewControllerTest {
     @MockitoBean
     private InterviewService interviewService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper =
+            new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Test
     void shouldReturnAllInterviews() throws Exception {
@@ -126,6 +129,7 @@ class InterviewControllerTest {
                 .applicationId(1L)
                 .typeId(1L)
                 .resultId(1L)
+                .scheduledAt(LocalDateTime.of(2026, 9, 1, 10, 0))
                 .build();
 
         InterviewDTO response = InterviewDTO.builder()
@@ -159,6 +163,7 @@ class InterviewControllerTest {
                 .typeId(1L)
                 .resultId(2L)
                 .notes("Rescheduled interview")
+                .scheduledAt(LocalDateTime.of(2026, 9, 2, 14, 30))
                 .build();
 
         InterviewDTO response = InterviewDTO.builder()
