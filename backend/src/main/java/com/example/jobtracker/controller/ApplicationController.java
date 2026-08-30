@@ -1,5 +1,7 @@
 package com.example.jobtracker.controller;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,7 +74,7 @@ public class ApplicationController {
 
     @PostMapping
     public ResponseEntity<ApplicationDTO> create(
-            @RequestBody ApplicationDTO dto) {
+            @Valid @RequestBody ApplicationDTO dto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -83,7 +85,7 @@ public class ApplicationController {
     @PutMapping("/{id}")
     public ResponseEntity<ApplicationDTO> update(
             @PathVariable Long id,
-            @RequestBody ApplicationDTO dto) {
+            @Valid @RequestBody ApplicationDTO dto) {
 
         return ResponseEntity.ok(
                 applicationService.update(id, dto)

@@ -1,5 +1,7 @@
 package com.example.jobtracker.controller;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AppUserDTO> register(
-            @RequestBody RegisterRequestDTO dto) {
+            @Valid @RequestBody RegisterRequestDTO dto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -34,7 +36,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(
-            @RequestBody LoginRequestDTO dto) {
+            @Valid @RequestBody LoginRequestDTO dto) {
 
         return ResponseEntity.ok(
                 appUserService.login(dto)

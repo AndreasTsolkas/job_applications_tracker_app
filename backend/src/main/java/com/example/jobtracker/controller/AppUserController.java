@@ -1,5 +1,7 @@
 package com.example.jobtracker.controller;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +44,7 @@ public class AppUserController {
     @PutMapping("/{id}")
     public ResponseEntity<AppUserDTO> update(
             @PathVariable Long id,
-            @RequestBody AppUserDTO dto) {
+            @Valid @RequestBody AppUserDTO dto) {
 
         return ResponseEntity.ok(
                 appUserService.update(id, dto)
