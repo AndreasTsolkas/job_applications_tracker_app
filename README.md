@@ -310,6 +310,7 @@ The following backend components have been implemented:
 * Initial REST API endpoints
 * JWT-based authentication (register/login)
 * JWT-based authorization enforced on all endpoints except register/login
+* Jakarta Bean Validation on all request DTOs (`@Valid` + `@NotNull`/`@NotBlank`/`@Size`/`@Email`), enforced on every create/update endpoint
 
 ---
 
@@ -619,7 +620,6 @@ seed_data.sql.txt
 Upcoming tasks:
 
 * Create core business logic
-* Add validation using Jakarta Validation
 * Add global exception handling
 * Improve API error responses
 * Add advanced application workflow handling
@@ -632,6 +632,7 @@ Upcoming tasks:
 Upcoming testing tasks:
 
 * Start integration testing
+* Add negative-path validation tests (controller-level 400 assertions for invalid/missing fields)
 
 ## Frontend
 
