@@ -1,5 +1,6 @@
 package com.example.jobtracker.DTO;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,10 @@ public class ApplicationStatusHistoryDTO {
 
     private Long id;
 
+    @NotNull
     private Long applicationId;
 
+    @NotNull
     private Long statusId;
 
     private String notes;
